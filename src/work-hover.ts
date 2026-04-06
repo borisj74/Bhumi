@@ -193,6 +193,8 @@ export function initWorkPage(): () => void {
   workBackdropImg.style.transform = `translate(-50%, -50%) scale(${BG_SCALE})`;
 
   const onMouseOver = (e: MouseEvent): void => {
+    // Skip hover preview on touch/coarse-pointer devices (prevents pinned-frame race on mobile tap)
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const frame = (e.target as Element | null)?.closest?.('.work-frame');
     if (!frame || !(frame instanceof HTMLElement)) return;
     const item = frame.closest('.work-item');
@@ -221,7 +223,9 @@ export function initWorkPage(): () => void {
       }
     });
     requestAnimationFrame(() => {
-      pinActiveThumbnail(frame);
+      if (workBackdrop.classList.contains('is-visible')) {
+        pinActiveThumbnail(frame);
+      }
     });
   };
 
