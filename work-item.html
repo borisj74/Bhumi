@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHUMI | Work</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.3/index.min.css" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            cursor: none !important;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #F4F4F0;
+            color: #111111;
+            font-family: 'Geist Sans', sans-serif;
+            overflow: hidden;
+            height: 100dvh;
+            width: 100vw;
+        }
+
+        body.grid-mode {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: auto;
+            min-height: 100dvh;
+        }
+
+        ::-webkit-scrollbar { width: 0; background: transparent; }
+
+        /* ─── Shared text style (matches nav/logo) ─── */
+        .wi-label {
+            font-family: 'Geist Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #111111;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .wi-label:hover { color: #C5A880; }
+
+        /* ─── Directional cursor (single view only) ─── */
+        #work-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 99999;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            font-family: 'Geist Sans', sans-serif;
+            font-size: 18px;
+            line-height: 1;
+            color: #111111;
+            transition: opacity 0.15s ease;
+        }
+
+        /* ─── Dot cursor (grid mode) ─── */
+        #grid-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 99999;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #C5A880;
+            border-radius: 50%;
+            transition: opacity 0.15s ease;
+            opacity: 0;
+        }
+
+        body.grid-mode #work-cursor  { opacity: 0 !important; pointer-events: none; }
+        body.grid-mode #grid-cursor  { opacity: 1; }
+        body:not(.grid-mode) #grid-cursor { opacity: 0; }
+
+        /* ─── Top nav ─── */
+        #wi-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        @media (min-width: 768px) { #wi-nav { padding: 48px; } }
+        #wi-nav a { pointer-events: auto; }
+
+        /* ─── Single-view chrome: one horizontal band at viewport middle (editorial layout) ─── */
+        #wi-single-chrome {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            padding: 0 24px;
+            pointer-events: none;
+        }
+        @media (min-width: 768px) {
+            #wi-single-chrome { padding: 0 48px; gap: 32px; }
+        }
+
+        .wi-single-left {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        /* Grid link, then image counter — all breakpoints */
+        .wi-single-right {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 0.5rem;
+        }
+
+        #wi-view-toggle {
+            order: 1;
+            position: static;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: none;
+            pointer-events: auto;
+        }
+
+        #wi-counter {
+            order: 2;
+            font-family: 'Geist Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        /* Project meta: title → description → year — all breakpoints */
+        #wi-project-meta {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            row-gap: 0.5rem;
+            max-width: min(46vw, 520px);
+            text-align: left;
+        }
+        #wi-project-title {
+            order: 1;
+            display: block;
+            width: 100%;
+            font-family: 'Geist Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #111111;
+            line-height: 1.35;
+            margin: 0;
+            font-weight: 400;
+        }
+        #wi-project-desc {
+            order: 2;
+            display: block;
+            width: 100%;
+            font-family: 'Geist Sans', sans-serif;
+            font-size: 11px;
+            line-height: 1.45;
+            letter-spacing: 0.02em;
+            color: #4b5563;
+            font-weight: 400;
+            margin: 0;
+        }
+        #wi-project-year {
+            order: 3;
+            display: block;
+            width: 100%;
+            font-family: 'Geist Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin: 0;
+        }
+
+        /* Grid page: chrome becomes top block; only project copy (Grid + counter hidden) */
+        body.grid-mode #wi-single-chrome {
+            position: relative;
+            top: auto;
+            transform: none;
+            display: block;
+            flex: 0 0 auto;
+            padding: 88px 24px 28px;
+            z-index: auto;
+        }
+        @media (min-width: 768px) {
+            body.grid-mode #wi-single-chrome { padding: 112px 48px 36px; }
+        }
+        body.grid-mode .wi-single-right { display: none; }
+        body.grid-mode .wi-single-left { width: 100%; }
+        body.grid-mode #wi-project-meta {
+            max-width: none;
+        }
+
+        /* ─── Single image stage (centered; chrome sits on middle band above) ─── */
+        #wi-stage {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        body.grid-mode #wi-stage {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #wi-img {
+            max-width: min(52vw, 720px);
+            max-height: 78dvh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            opacity: 1;
+            transition: opacity 0.3s cubic-bezier(0.33, 0.12, 0.2, 1);
+        }
+
+        /* Mobile single view: image first, chrome below (stacking rules are global) */
+        @media (max-width: 767px) {
+            body:not(.grid-mode) {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
+                min-height: 100dvh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            body:not(.grid-mode) #wi-stage {
+                position: relative;
+                inset: auto;
+                flex: 0 0 auto;
+                z-index: 1;
+                min-height: 0;
+                padding: 88px 20px 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            body:not(.grid-mode) #wi-img {
+                max-width: min(88vw, 100%);
+                max-height: min(52dvh, 420px);
+            }
+
+            body:not(.grid-mode) #wi-single-chrome {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                transform: none;
+                flex: 0 0 auto;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.875rem;
+                padding: 0 24px 32px;
+                pointer-events: auto;
+            }
+
+            body:not(.grid-mode) .wi-single-left {
+                width: 100%;
+                align-items: flex-start;
+            }
+
+            body:not(.grid-mode) .wi-single-right {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            body:not(.grid-mode) #wi-project-meta {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        #wi-img.is-fading { opacity: 0; }
+
+        /* ─── Grid: work-sized thumbs, horizontally centered on the page ─── */
+        #wi-grid {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            align-content: flex-start;
+            justify-content: center;
+            gap: 22px 16px;
+            padding: 0 24px 72px;
+            box-sizing: border-box;
+        }
+        @media (min-width: 768px) {
+            #wi-grid { gap: 32px 26px; padding: 0 48px 96px; }
+        }
+
+        /* Fills space below meta; centers tile block vertically (equal space top/bottom when it fits) */
+        body.grid-mode #wi-grid {
+            flex: 1 1 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 0;
+            margin-top: 0;
+            padding: 24px;
+        }
+        @media (min-width: 768px) {
+            body.grid-mode #wi-grid {
+                gap: 32px 26px;
+                padding: 32px 48px;
+            }
+        }
+
+        .wi-grid-item {
+            flex: 0 0 auto;
+            overflow: hidden;
+            display: block;
+            width: 100%;
+            max-width: min(100%, 280px);
+            margin-left: auto;
+            margin-right: auto;
+            aspect-ratio: 3 / 4;
+        }
+        @media (min-width: 768px) {
+            .wi-grid-item {
+                width: 40%;
+                max-width: 200px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .wi-grid-item {
+                width: 38%;
+                max-width: 220px;
+            }
+        }
+
+        .wi-grid-item.wi-grid-item--xs {
+            max-width: min(100%, 200px);
+            aspect-ratio: 2 / 3;
+        }
+        @media (min-width: 768px) {
+            .wi-grid-item.wi-grid-item--xs {
+                width: 30%;
+                max-width: 140px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .wi-grid-item.wi-grid-item--xs {
+                width: 28%;
+                max-width: 160px;
+            }
+        }
+
+        .wi-grid-item.wi-grid-item--s {
+            max-width: min(100%, 240px);
+            aspect-ratio: 3 / 4;
+        }
+        @media (min-width: 768px) {
+            .wi-grid-item.wi-grid-item--s {
+                width: 34%;
+                max-width: 170px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .wi-grid-item.wi-grid-item--s {
+                width: 32%;
+                max-width: 190px;
+            }
+        }
+
+        .wi-grid-item.wi-grid-item--l {
+            max-width: min(100%, 320px);
+            aspect-ratio: 4 / 5;
+        }
+        @media (min-width: 768px) {
+            .wi-grid-item.wi-grid-item--l {
+                width: 46%;
+                max-width: 240px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .wi-grid-item.wi-grid-item--l {
+                width: 44%;
+                max-width: 268px;
+            }
+        }
+
+        .wi-grid-item.wi-grid-item--xl {
+            max-width: min(100%, 360px);
+            aspect-ratio: 3 / 4;
+        }
+        @media (min-width: 768px) {
+            .wi-grid-item.wi-grid-item--xl {
+                width: 52%;
+                max-width: 280px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .wi-grid-item.wi-grid-item--xl {
+                width: 50%;
+                max-width: 300px;
+            }
+        }
+
+        .wi-grid-item img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            transition: transform 0.75s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .wi-grid-item:hover img { transform: scale(1.03); }
+
+        /* ─── 404 fallback ─── */
+        #wi-not-found {
+            display: none;
+            position: fixed;
+            inset: 0;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        #wi-not-found.is-visible { display: flex; }
+    </style>
+</head>
+<body>
+
+    <!-- Directional cursor (single view) -->
+    <div id="work-cursor" aria-hidden="true">→</div>
+
+    <!-- Dot cursor (grid view) -->
+    <div id="grid-cursor" aria-hidden="true"></div>
+
+    <!-- Top nav -->
+    <nav id="wi-nav" aria-label="Work item navigation">
+        <a href="index.html" class="wi-label" aria-label="Home">Bhumi</a>
+        <a href="work.html" class="wi-label" aria-label="Back to work">Work [←]</a>
+    </nav>
+
+    <!-- Single image stage (first in DOM so on mobile it stacks above project chrome) -->
+    <main id="wi-stage" role="main">
+        <img id="wi-img" src="" alt="" decoding="async" />
+    </main>
+
+    <!-- Desktop: middle band overlay · Mobile: flows below #wi-stage -->
+    <div id="wi-single-chrome">
+        <div class="wi-single-left">
+            <header id="wi-project-meta" aria-labelledby="wi-project-title">
+                <h1 id="wi-project-title">—</h1>
+                <p id="wi-project-desc"></p>
+                <span id="wi-project-year"></span>
+            </header>
+        </div>
+        <div class="wi-single-right">
+            <button type="button" id="wi-view-toggle" class="wi-label" aria-label="Open image grid">
+                Grid
+            </button>
+            <span id="wi-counter" aria-live="polite">— —</span>
+        </div>
+    </div>
+
+    <!-- Grid view -->
+    <div id="wi-grid" role="region" aria-label="Image grid"></div>
+
+    <!-- 404 fallback -->
+    <div id="wi-not-found" role="alert">
+        <span style="font-family:'Geist Sans',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#6b7280;">
+            Project not found
+        </span>
+        <a href="work.html" style="font-family:'Geist Sans',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#C5A880;text-decoration:none;">
+            Back to Work
+        </a>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('project') ?? '';
+
+        const PROJECTS = [
+            {
+                slug: 'Adria', title: 'Adria',
+                images: [
+                    '/imgs/Adria/bhauma108_close-up_of_hair_long_straight_brown_hair_blowing_i_1e99d3d8-119b-45e4-9aed-d9b97da01070_1.png',
+                    '/imgs/Adria/bhauma108_close-up_of_hair_long_straight_brown_hair_blowing_i_1e99d3d8-119b-45e4-9aed-d9b97da01070_3.png',
+                    '/imgs/Adria/bhauma108_close-up_of_hair_long_straight_brown_hair_blowing_i_6ecf9fe5-e2f2-4d40-92e9-223c62578ac9_1.png',
+                    '/imgs/Adria/bhauma108_close-up_of_hair_long_straight_brown_hair_blowing_i_6ecf9fe5-e2f2-4d40-92e9-223c62578ac9_3.png',
+                    '/imgs/Adria/bhauma108_close-up_of_hair_long_straight_brown_hair_blowing_i_d6b4fd8a-92b9-4ab6-b139-69e6036d1df8_1.png',
+                ],
+            },
+            {
+                slug: 'BVLGARI', title: 'BVLGARI',
+                images: [
+                    '/imgs/BVLGARI/bhauma108_editorial_photography_of_black_mode._he_is_wearing__2452b5aa-31da-48a1-b48a-10809e19c51c_2.png',
+                    '/imgs/BVLGARI/bhauma108_editorial_photography_of_black_mode._he_is_wearing__2452b5aa-31da-48a1-b48a-10809e19c51c_3.png',
+                    '/imgs/BVLGARI/bhauma108_editorial_photography_of_black_mode._he_is_wearing__9632395a-f51a-4093-a966-6b01296c60a1_0.png',
+                    '/imgs/BVLGARI/bhauma108_editorial_photography_of_black_mode._he_is_wearing__d5063ad9-5d13-4a2e-a19c-cd16dfc5d70b_0.png',
+                ],
+            },
+            {
+                slug: 'BoyZ', title: 'BoyZ',
+                images: [
+                    '/imgs/BoyZ/bhauma108_headshot_of_a_male_model_with_very_short_hair_shave_27667292-8a56-4f53-a509-6fa2b9ec13fc_0.png',
+                    '/imgs/BoyZ/bhauma108_headshot_of_a_male_model_with_very_short_hair_shave_27667292-8a56-4f53-a509-6fa2b9ec13fc_1.png',
+                    '/imgs/BoyZ/bhauma108_headshot_of_a_male_model_with_very_short_hair_shave_27667292-8a56-4f53-a509-6fa2b9ec13fc_3.png',
+                    '/imgs/BoyZ/bhauma108_headshot_of_a_male_model_with_very_short_hair_shave_2d3f7cf7-352f-4686-9410-cfa3ea3a976e_3.png',
+                    '/imgs/BoyZ/bhauma108_headshot_of_a_male_model_with_very_short_hair_shave_72beb962-b2d4-4535-ba89-dc6d76c33d88_0.png',
+                    '/imgs/BoyZ/bhauma108_headshot_of_a_male_model_with_very_short_hair_shave_83565f97-f343-4daa-b26c-c9acbf2051ea_0.png',
+                ],
+            },
+            {
+                slug: 'Cont', title: 'Cont',
+                images: [
+                    '/imgs/Cont/bhauma108_A_surreal_fashion_editorial_portrait_of_a_figure_we_98023321-a27c-457c-8e08-1fa84fe1e8a5_0.png',
+                    '/imgs/Cont/bhauma108_A_surreal_fashion_editorial_portrait_of_a_figure_we_98023321-a27c-457c-8e08-1fa84fe1e8a5_3.png',
+                    '/imgs/Cont/bhauma108_A_surreal_fashion_editorial_portrait_of_a_figure_we_9a4f2e41-0036-465b-86a4-4291b0cd1980_2.png',
+                    '/imgs/Cont/bhauma108_A_surreal_fashion_editorial_portrait_of_a_figure_we_ae46228e-ed8e-4965-a8a6-243ff4f3e207_1.png',
+                    '/imgs/Cont/bhauma108_A_surreal_fashion_editorial_portrait_of_a_figure_we_ae46228e-ed8e-4965-a8a6-243ff4f3e207_3.png',
+                    '/imgs/Cont/bhauma108_A_surreal_fashion_editorial_portrait_of_a_figure_we_d649041b-fec4-49d9-afed-9a5b4b2e76c8_2.png',
+                ],
+            },
+            {
+                slug: 'Crystaline', title: 'Crystaline',
+                images: [
+                    '/imgs/Crystaline/bhauma108_Product_close-up_Photography_of_expensive_oversized_4e5692b4-5569-4089-8183-3f5a665fc5c2_1.png',
+                    '/imgs/Crystaline/bhauma108_Product_close-up_Photography_of_expensive_oversized_4e5692b4-5569-4089-8183-3f5a665fc5c2_2.png',
+                    '/imgs/Crystaline/bhauma108_Product_close-up_Photography_of_expensive_oversized_4e5692b4-5569-4089-8183-3f5a665fc5c2_3.png',
+                    '/imgs/Crystaline/bhauma108_Product_close-up_Photography_of_expensive_oversized_bd0b9ae1-32ab-4747-b202-ed0bf3c32794_0.png',
+                    '/imgs/Crystaline/bhauma108_Product_close-up_Photography_of_expensive_oversized_bd0b9ae1-32ab-4747-b202-ed0bf3c32794_1.png',
+                ],
+            },
+            {
+                slug: 'Darling', title: 'Darling',
+                images: [
+                    '/imgs/Darling/bhauma108_a_minimalistic_leather_clutch_in_the_shape_of_an_ar_52803a6f-8ef1-41e5-af0d-5a46793517bf_2.png',
+                    '/imgs/Darling/bhauma108_a_minimalistic_leather_clutch_in_the_shape_of_an_ar_889eca89-059f-4b86-bb76-2b8cbb42a2f4_1.png',
+                    '/imgs/Darling/bhauma108_a_minimalistic_leather_clutch_in_the_shape_of_an_ar_889eca89-059f-4b86-bb76-2b8cbb42a2f4_2.png',
+                    '/imgs/Darling/bhauma108_a_minimalistic_leather_clutch_in_the_shape_of_an_ar_d5f623fa-5ee1-4574-b7ac-8f3aab61c10c_2.png',
+                    '/imgs/Darling/bhauma108_a_minimalistic_leather_clutch_in_the_shape_of_an_ar_d5f623fa-5ee1-4574-b7ac-8f3aab61c10c_3.png',
+                    '/imgs/Darling/bhauma108_a_minimalistic_leather_clutch_in_the_shape_of_an_ar_fa57721c-64ea-4054-bcfe-f65fa305ea5c_2.png',
+                ],
+            },
+            {
+                slug: 'Jawali', title: 'Jawali',
+                images: [
+                    '/imgs/Jawali/bhauma108_High-end_editorial_shoot_Of_a_Black_male_model_in_h_0fcf5e00-6b62-4f51-9cb8-13740c4615be_2.png',
+                    '/imgs/Jawali/bhauma108_High-end_editorial_shoot_Of_a_Black_male_model_in_h_364c3a3b-1f02-40e3-8628-74aa3d1f242b_0.png',
+                    '/imgs/Jawali/bhauma108_High-end_editorial_shoot_Of_a_Black_male_model_in_h_364c3a3b-1f02-40e3-8628-74aa3d1f242b_1.png',
+                    '/imgs/Jawali/bhauma108_High-end_editorial_shoot_Of_a_Black_male_model_in_h_364c3a3b-1f02-40e3-8628-74aa3d1f242b_3.png',
+                    '/imgs/Jawali/bhauma108_High-end_editorial_shoot_Of_a_Black_male_model_in_h_b214dfe2-0208-4679-a65c-bff252a5600c_1.png',
+                    '/imgs/Jawali/bhauma108_High-end_editorial_shoot_Of_a_Black_male_model_in_h_d622a26b-5b5e-4452-8d77-f8f1c4e3395f_2.png',
+                ],
+            },
+            {
+                slug: 'Malx', title: 'Malx',
+                images: [
+                    '/imgs/Malx/bhauma108_a_photo_of_an_ethereal_figure_wearing_an_oversized__8ccee650-d0df-4561-8017-ae28a6214c93_3.png',
+                    '/imgs/Malx/bhauma108_a_photo_of_an_ethereal_figure_wearing_an_oversized__bdf56492-d15b-47a0-8e7f-9ae75c74b7ff_0.png',
+                    '/imgs/Malx/bhauma108_a_photo_of_an_ethereal_figure_wearing_an_oversized__de275dd3-9284-4414-87af-9ba16a7ddb22_0.png',
+                    '/imgs/Malx/bhauma108_a_photo_of_an_ethereal_figure_wearing_an_oversized__de275dd3-9284-4414-87af-9ba16a7ddb22_1.png',
+                    '/imgs/Malx/bhauma108_a_photo_of_an_ethereal_figure_wearing_an_oversized__de275dd3-9284-4414-87af-9ba16a7ddb22_2.png',
+                    '/imgs/Malx/bhauma108_a_photo_of_an_ethereal_figure_wearing_an_oversized__de275dd3-9284-4414-87af-9ba16a7ddb22_3.png',
+                ],
+            },
+            {
+                slug: 'Maskz_||', title: 'Maskz',
+                images: [
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_3d61108b-2443-439d-a689-4124638323fd_0.png',
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_3d61108b-2443-439d-a689-4124638323fd_2.png',
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_3d61108b-2443-439d-a689-4124638323fd_3.png',
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_586a9086-22b3-4c50-a7f1-4aa99dd60be8_0.png',
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_586a9086-22b3-4c50-a7f1-4aa99dd60be8_1.png',
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_586a9086-22b3-4c50-a7f1-4aa99dd60be8_2.png',
+                    '/imgs/Maskz_||/bhauma108_Avant-garde_portrait_of_a_figure_in_a_surreal_texti_586a9086-22b3-4c50-a7f1-4aa99dd60be8_3.png',
+                ],
+            },
+            {
+                slug: 'Mskz', title: 'Mskz',
+                images: [
+                    '/imgs/Mskz/bhauma108_35mm_photo_of_a_woman_dressed_like_futuristic_queen_39dccdb4-e592-4783-83e0-9c0b4fd3ad98_3.png',
+                    '/imgs/Mskz/bhauma108_A_surreal_high-fashion_editorial_portrait_of_a_figu_d2c25ebd-e09e-4dab-8a09-bd98d5379599_0.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_50a8f372-7fc9-4082-8a33-55119e4ebd08_0.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_626a628e-b35d-4f7b-afc9-c9421a2851c6_1.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_62c646c6-5d99-4138-91e6-9c5fa647385c_1.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_6b200a9c-7af5-4bbf-9662-900afd7c213a_0.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_6fe39314-8e41-4af5-af04-351df9b62f89_2.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_7986ba0c-0824-4394-a82e-3a1add07584f_1.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_79b23ed6-6104-4b79-a431-d0213068c786_0.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_79b23ed6-6104-4b79-a431-d0213068c786_1.png',
+                    '/imgs/Mskz/bhauma108_Front_facing_A_surreal_high-fashion_editorial_portr_b503516e-f6ad-4d3c-bdbf-9d22f2a21dad_0.png',
+                ],
+            },
+            {
+                slug: 'NS', title: 'NS',
+                images: [
+                    '/imgs/NS/bhauma108_A_striking_dance_shot_of_Latino_male_model_with_mus_41ae70c1-d750-464f-833c-0d1ebf64d2ad_2.png',
+                    '/imgs/NS/bhauma108_A_striking_dance_shot_of_Latino_male_model_with_mus_d39cc2fd-ccdf-4699-8dd9-1b627ea9fd56_2.png',
+                    '/imgs/NS/bhauma108_A_striking_dance_shot_of_serbian_male_models__full__3380ec4d-94f9-45bf-bea6-c9e60d0481d5_0.png',
+                    '/imgs/NS/bhauma108_A_striking_dance_shot_of_serbian_male_models__full__3380ec4d-94f9-45bf-bea6-c9e60d0481d5_1.png',
+                    '/imgs/NS/bhauma108_A_striking_dance_shot_of_serbian_male_models__full__a774eb1f-a211-4f12-b4aa-b2a7488310ae_1.png',
+                    '/imgs/NS/bhauma108_A_striking_dance_shot_of_serbian_male_models__full__d9b484e2-681e-484f-a21b-7e57ea68e9f8_2.png',
+                ],
+            },
+            {
+                slug: 'Nike', title: 'Nike',
+                images: [
+                    '/imgs/Nike/bhauma108_A_high-fashion_editorial_portrait_of_an_elegant_bla_6338ce9d-7dd5-41f3-a4bd-b036925f9460_3.png',
+                    '/imgs/Nike/bhauma108_A_high-fashion_editorial_portrait_of_an_elegant_bla_87df64d2-c326-4ea8-a55a-87532e6285df_0.png',
+                    '/imgs/Nike/bhauma108_A_high-fashion_editorial_portrait_of_an_elegant_bla_87df64d2-c326-4ea8-a55a-87532e6285df_1.png',
+                    '/imgs/Nike/bhauma108_A_high-fashion_editorial_portrait_of_an_elegant_bla_87df64d2-c326-4ea8-a55a-87532e6285df_2.png',
+                    '/imgs/Nike/bhauma108_A_high-fashion_editorial_portrait_of_an_elegant_bla_87df64d2-c326-4ea8-a55a-87532e6285df_3.png',
+                    '/imgs/Nike/bhauma108_A_high-fashion_editorial_portrait_of_an_elegant_bla_d0a4c371-d8c9-4051-a8d5-26b1be79a5df_3.png',
+                ],
+            },
+            {
+                slug: 'Red', title: 'Red',
+                images: [
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_4c3c4b04-2553-4afe-a685-e491ae6a40d3_0.png',
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_4c3c4b04-2553-4afe-a685-e491ae6a40d3_1.png',
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_4c3c4b04-2553-4afe-a685-e491ae6a40d3_2.png',
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_92b78ebc-019a-45cb-8a43-3f055c3d48ff_1.png',
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_c10fcecb-2ca7-4fd8-8fd4-b2c944ffbc16_1.png',
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_c10fcecb-2ca7-4fd8-8fd4-b2c944ffbc16_2.png',
+                    '/imgs/Red/bhauma108_editorial_photography_of_model_has_a_face_with_orna_c10fcecb-2ca7-4fd8-8fd4-b2c944ffbc16_3.png',
+                ],
+            },
+            {
+                slug: 'Vogue_Rwanda', title: 'Vogue Rwanda',
+                images: [
+                    '/imgs/Vogue_Rwanda/bhauma108_editorial_photography_of_black_mode._he_is_wearing__73ac47bf-7472-4f25-9790-96c7fac5c5b8_0.png',
+                    '/imgs/Vogue_Rwanda/bhauma108_editorial_photography_of_black_mode._he_is_wearing__73ac47bf-7472-4f25-9790-96c7fac5c5b8_1.png',
+                    '/imgs/Vogue_Rwanda/bhauma108_editorial_photography_of_model_has_a_face_with_orna_0e34cda9-cdc0-46d1-b797-9700d116911f_1.png',
+                    '/imgs/Vogue_Rwanda/bhauma108_editorial_photography_of_model_has_a_face_with_orna_518ff50e-b116-484e-ac52-8b48c5bef3e8_2.png',
+                    '/imgs/Vogue_Rwanda/bhauma108_editorial_photography_of_model_has_a_face_with_orna_7a8c56c9-f49c-4f78-af67-5cbbbf55e9d0_1.png',
+                    '/imgs/Vogue_Rwanda/bhauma108_editorial_photography_of_model_has_a_face_with_orna_9f8b4186-dd5b-4bc3-bc5c-96dbd2440eb6_2.png',
+                ],
+            },
+        ];
+
+        const PROJECT_META = {
+            Adria:       { description: 'Hair and movement study shot as a quiet, cinematic portrait series.', year: 2023 },
+            BVLGARI:     { description: 'Jewellery-led editorial with sculptural light and restrained styling.', year: 2024 },
+            BoyZ:        { description: 'Tight headshot series exploring texture, skin, and minimal gesture.', year: 2023 },
+            Cont:        { description: 'Surreal silhouettes and soft distortion for a dreamlike fashion story.', year: 2025 },
+            Crystaline:  { description: 'Macro product stills with crisp edges and a cool, glass-like palette.', year: 2024 },
+            Darling:     { description: 'Accessory-focused frames with soft shadows and tactile leather detail.', year: 2023 },
+            Jawali:      { description: 'High-contrast studio portraits with strong shoulders and calm posture.', year: 2025 },
+            Malx:        { description: 'Ethereal volumes and soft fog for a slow, otherworldly editorial.', year: 2024 },
+            'Maskz_||':  { description: 'Textile-forward portraits with surreal masking and layered texture.', year: 2026 },
+            Mskz:        { description: 'Futuristic queen narrative with frontal symmetry and metallic light.', year: 2025 },
+            NS:          { description: 'Dance-floor energy captured mid-motion with long limbs and heat.', year: 2025 },
+            Nike:        { description: 'Athletic elegance with sculptural shadow and confident stillness.', year: 2024 },
+            Red:         { description: 'Ornate face studies with warm tones and a deliberate, slow rhythm.', year: 2023 },
+            Vogue_Rwanda:{ description: 'Editorial mix of portrait and detail for a bold, contemporary spread.', year: 2026 },
+        };
+
+        // ─── Find project ───
+        const baseProject = PROJECTS.find(function (p) { return p.slug === slug; });
+        const extra = baseProject ? PROJECT_META[baseProject.slug] : null;
+        const project = baseProject && extra ? Object.assign({}, baseProject, extra) : baseProject;
+
+        const imgEl         = document.getElementById('wi-img');
+        const stageEl       = document.getElementById('wi-stage');
+        const gridEl        = document.getElementById('wi-grid');
+        const toggleBtn     = document.getElementById('wi-view-toggle');
+        const cursorEl      = document.getElementById('work-cursor');
+        const dotCursor     = document.getElementById('grid-cursor');
+        const counterEl     = document.getElementById('wi-counter');
+        const metaTitleEl   = document.getElementById('wi-project-title');
+        const metaDescEl    = document.getElementById('wi-project-desc');
+        const metaYearEl    = document.getElementById('wi-project-year');
+        const notFoundEl    = document.getElementById('wi-not-found');
+
+        if (!project || project.images.length === 0) {
+            document.title = 'BHUMI | Not Found';
+            if (notFoundEl) notFoundEl.classList.add('is-visible');
+            if (imgEl) imgEl.style.display = 'none';
+            var chromeEl = document.getElementById('wi-single-chrome');
+            if (chromeEl) chromeEl.style.display = 'none';
+            return;
+        }
+
+        const images = project.images;
+        const total  = images.length;
+        let current  = 0;
+        let isGrid   = false;
+
+        document.title = 'BHUMI | ' + project.title + ' · ' + project.year;
+
+        // ─── Helpers ───
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function updateChrome() {
+            if (metaTitleEl) metaTitleEl.textContent = project.title.toUpperCase();
+            if (metaDescEl)  metaDescEl.textContent  = project.description;
+            if (metaYearEl)  metaYearEl.textContent  = String(project.year);
+            if (counterEl)   counterEl.textContent   = pad(current + 1) + ' — ' + pad(total);
+            if (toggleBtn) {
+                toggleBtn.textContent = 'Grid';
+                toggleBtn.setAttribute('aria-pressed', 'false');
+            }
+        }
+
+        function showImage(index, instant) {
+            if (!imgEl) return;
+            if (instant) {
+                imgEl.src = images[index];
+            } else {
+                imgEl.classList.add('is-fading');
+                setTimeout(() => {
+                    imgEl.src = images[index];
+                    imgEl.classList.remove('is-fading');
+                }, 300);
+            }
+        }
+
+        function preload(index) {
+            if (index >= 0 && index < total) {
+                const img = new Image();
+                img.src = images[index];
+            }
+        }
+
+        // ─── Build grid — varied tile scales (matches work page frame rhythm) ───
+        var WI_GRID_FRAME_CLASSES = [
+            'wi-grid-item--xs', 'wi-grid-item--xl', '', 'wi-grid-item--l',
+            'wi-grid-item--s', 'wi-grid-item--xl', 'wi-grid-item--l', 'wi-grid-item--xs',
+            '', 'wi-grid-item--s', 'wi-grid-item--xl', 'wi-grid-item--l', 'wi-grid-item--s'
+        ];
+
+        function buildGrid() {
+            if (!gridEl) return;
+
+            if (gridEl.childElementCount > 0) return;
+
+            images.forEach(function (src, i) {
+                var item = document.createElement('div');
+                var frameExtra = WI_GRID_FRAME_CLASSES[i % WI_GRID_FRAME_CLASSES.length];
+                item.className = frameExtra ? 'wi-grid-item ' + frameExtra : 'wi-grid-item';
+                item.setAttribute('role', 'button');
+                item.setAttribute('tabindex', '0');
+                item.setAttribute('aria-label', 'Open image ' + (i + 1));
+
+                var img = document.createElement('img');
+                img.src = src;
+                img.alt = '';
+                img.loading = 'lazy';
+                img.decoding = 'async';
+
+                item.appendChild(img);
+                gridEl.appendChild(item);
+
+                item.addEventListener('click', function () {
+                    current = i;
+                    showImage(current, true);
+                    preload(current + 1);
+                    enterSingleView();
+                });
+                item.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); }
+                });
+            });
+        }
+
+        // ─── View switching ───
+        function enterGridView() {
+            isGrid = true;
+            document.body.classList.add('grid-mode');
+            buildGrid();
+            updateChrome();
+            window.scrollTo(0, 0);
+        }
+
+        function enterSingleView() {
+            isGrid = false;
+            document.body.classList.remove('grid-mode');
+            updateChrome();
+        }
+
+        // Initial render
+        showImage(0, true);
+        updateChrome();
+        preload(1);
+
+        // ─── Grid button (single view only — hidden in grid mode) ───
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                if (!isGrid) enterGridView();
+            });
+        }
+
+        // ─── Single-view navigation ───
+        function goNext() {
+            if (current < total - 1) { current++; showImage(current, false); preload(current + 1); updateChrome(); }
+        }
+        function goPrev() {
+            if (current > 0) { current--; showImage(current, false); preload(current - 1); updateChrome(); }
+        }
+
+        // ─── Cursor tracking ───
+        let cursorX = 0, cursorY = 0, isLeft = false, rafPending = false;
+
+        document.addEventListener('mousemove', function (e) {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            isLeft  = e.clientX < window.innerWidth / 2;
+
+            if (!rafPending) {
+                rafPending = true;
+                requestAnimationFrame(function () {
+                    rafPending = false;
+                    if (cursorEl) {
+                        cursorEl.style.left = cursorX + 'px';
+                        cursorEl.style.top  = cursorY + 'px';
+                        cursorEl.textContent = isLeft ? '←' : '→';
+                        const atEdge = (isLeft && current === 0) || (!isLeft && current === total - 1);
+                        cursorEl.style.opacity = isGrid ? '0' : (atEdge ? '0.25' : '1');
+                    }
+                    if (dotCursor) {
+                        dotCursor.style.left = cursorX + 'px';
+                        dotCursor.style.top  = cursorY + 'px';
+                    }
+                });
+            }
+        });
+
+        document.addEventListener('mouseleave', function () {
+            if (cursorEl)  cursorEl.style.opacity  = '0';
+            if (dotCursor) dotCursor.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', function () {
+            if (cursorEl && !isGrid)  cursorEl.style.opacity  = '1';
+            if (dotCursor && isGrid)  dotCursor.style.opacity = '1';
+        });
+
+        // ─── Click navigation (single view only) ───
+        document.addEventListener('click', function (e) {
+            if (isGrid) return;
+            if (e.target && (e.target.closest('a') || e.target.closest('button'))) return;
+            if (isLeft) goPrev(); else goNext();
+        });
+
+        // ─── Keyboard ───
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                if (isGrid) enterSingleView(); else window.location.href = 'work.html';
+            }
+            if (!isGrid) {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowUp')   goNext();
+                if (e.key === 'ArrowLeft'  || e.key === 'ArrowDown') goPrev();
+            }
+        });
+
+        // ─── Touch / swipe (single view) ───
+        let touchStartX = 0;
+        document.addEventListener('touchstart', function (e) {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        document.addEventListener('touchend', function (e) {
+            if (isGrid) return;
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 40) {
+                if (dx < 0) goNext(); else goPrev();
+            }
+        }, { passive: true });
+
+    }());
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Home work preview — mirrors work.html .work-item .work-frame (WorkGrid on index) */
+@layer components {
+  .home-work-grid .work-item .work-frame {
+    width: 100%;
+    max-width: min(100%, 280px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (min-width: 768px) {
+    .home-work-grid .work-item .work-frame {
+      width: 40%;
+      max-width: 200px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .home-work-grid .work-item .work-frame {
+      width: 38%;
+      max-width: 220px;
+    }
+  }
+
+  .home-work-grid .work-item .work-frame.work-frame--xs {
+    max-width: min(100%, 200px);
+  }
+  @media (min-width: 768px) {
+    .home-work-grid .work-item .work-frame.work-frame--xs {
+      width: 28%;
+      max-width: 128px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .home-work-grid .work-item .work-frame.work-frame--xs {
+      width: 26%;
+      max-width: 148px;
+    }
+  }
+
+  .home-work-grid .work-item .work-frame.work-frame--s {
+    max-width: min(100%, 240px);
+  }
+  @media (min-width: 768px) {
+    .home-work-grid .work-item .work-frame.work-frame--s {
+      width: 34%;
+      max-width: 168px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .home-work-grid .work-item .work-frame.work-frame--s {
+      width: 32%;
+      max-width: 188px;
+    }
+  }
+
+  .home-work-grid .work-item .work-frame.work-frame--l {
+    max-width: min(100%, 320px);
+  }
+  @media (min-width: 768px) {
+    .home-work-grid .work-item .work-frame.work-frame--l {
+      width: 46%;
+      max-width: 232px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .home-work-grid .work-item .work-frame.work-frame--l {
+      width: 44%;
+      max-width: 260px;
+    }
+  }
+
+  .home-work-grid .work-item .work-frame.work-frame--xl {
+    max-width: min(100%, 360px);
+  }
+  @media (min-width: 768px) {
+    .home-work-grid .work-item .work-frame.work-frame--xl {
+      width: 52%;
+      max-width: 260px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .home-work-grid .work-item .work-frame.work-frame--xl {
+      width: 50%;
+      max-width: 300px;
+    }
+  }
+
+  .home-work-grid .work-item img {
+    transition: transform 0.75s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  .home-work-grid .work-item:hover img {
+    transform: translateY(-2px);
+  }
+}

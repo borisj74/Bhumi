@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-04T07-41-18-927Z-portfolio-archive-page-for-visage-fa",
+  "createdAt": "2026-04-04T07:41:18.932Z",
+  "prompt": "Portfolio archive page for VISAGE fashion agency. Asymmetric editorial masonry grid, B&W photography with color reveal on hover, typographic filter bar, consistent with VISAGE brand system.",
+  "mode": null,
+  "url": null,
+  "viewport": "desktop",
+  "repoRoot": "/Users/bjov/Desktop/Projects/AI Designer",
+  "cwd": "/Users/bjov/Desktop/Projects/AI Designer",
+  "requestPath": "/Users/bjov/Desktop/Projects/AI Designer/.aidesigner/runs/2026-04-04T07-41-18-927Z-portfolio-archive-page-for-visage-fa/request.json",
+  "repoContextPath": "/Users/bjov/Desktop/Projects/AI Designer/.aidesigner/runs/2026-04-04T07-41-18-927Z-portfolio-archive-page-for-visage-fa/repo-context.json",
+  "designHtmlPath": "/Users/bjov/Desktop/Projects/AI Designer/.aidesigner/runs/2026-04-04T07-41-18-927Z-portfolio-archive-page-for-visage-fa/design.html",
+  "previewPath": null,
+  "previewError": "Preview rendering requires puppeteer. Install it in the repo or alongside @aidesigner/agent-skills.",
+  "parentRunId": null,
+  "usage": null,
+  "transport": "mcp",
+  "remoteRunId": "f8d53995-5e78-4b71-8541-31c9af2d504b"
+}

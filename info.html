@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHUMI | Info</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.3/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/src/index.css" />
+    <style>
+        body {
+            background-color: #F4F4F0;
+            color: #111111;
+            cursor: none;
+        }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        *, *::before, *::after { cursor: none !important; }
+        body.menu-open { overflow: hidden; }
+
+        #site-header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 10000;
+            isolation: isolate;
+        }
+        #site-menu:not(.menu-visible) {
+            z-index: -1 !important;
+            pointer-events: none !important;
+        }
+        #site-menu.menu-visible {
+            z-index: 10050 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 99999;
+            pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #C5A880; }
+        .cursor-outline {
+            width: 44px; height: 44px;
+            border: 1px solid rgba(17, 17, 17, 0.35);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        .hover-underline { position: relative; }
+        .hover-underline::after {
+            content: ''; position: absolute;
+            width: 100%; transform: scaleX(0);
+            height: 1px; bottom: 0; left: 0;
+            background-color: #C5A880;
+            transform-origin: bottom right;
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .hover-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Two-column layout — works without Tailwind (e.g. file:// or missing bundle) */
+        .info-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .info-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+                column-gap: clamp(2rem, 5vw, 5rem);
+                row-gap: 0;
+                align-items: start;
+            }
+        }
+        .info-col-left,
+        .info-col-right {
+            min-width: 0;
+        }
+        .info-body {
+            font-family: "Geist Sans", system-ui, sans-serif;
+            font-size: 15px;
+            line-height: 1.75;
+            letter-spacing: normal;
+            color: #111111;
+        }
+        .info-label-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem 2rem;
+        }
+        @media (min-width: 640px) {
+            .info-label-row {
+                grid-template-columns: 6.5rem minmax(0, 1fr);
+                align-items: start;
+            }
+        }
+        .info-cv-row {
+            display: grid;
+            grid-template-columns: minmax(4.5rem, 6.25rem) minmax(0, 1fr);
+            gap: 0.25rem 1rem;
+            align-items: start;
+        }
+        .info-section-title {
+            font-family: "Geist Sans", system-ui, sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            font-weight: 400;
+            text-transform: none;
+            color: #111111;
+            margin-bottom: 0.5rem;
+        }
+        .info-label-row .info-section-title {
+            margin-bottom: 0;
+            color: #8A8A8A;
+        }
+        .info-year {
+            font-variant-numeric: tabular-nums;
+            color: rgba(17, 17, 17, 0.55);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-ink relative selection:bg-gold selection:text-base">
+
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Navigation -->
+    <nav id="site-header" class="fixed top-0 left-0 w-full p-6 md:p-12 flex justify-between items-start pointer-events-none text-gray-900">
+        <div class="flex flex-col pointer-events-auto">
+            <a href="index.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 leading-none" aria-label="Home">Bhumi</a>
+        </div>
+        <div class="flex flex-col items-end gap-2 pointer-events-auto">
+            <button type="button" id="menu-open" class="text-xs font-sans tracking-widest uppercase text-gray-900 hover:text-gold transition-colors duration-300" aria-expanded="false" aria-controls="site-menu">Menu [=]</button>
+        </div>
+    </nav>
+
+    <!-- Full-screen menu -->
+    <div id="site-menu" class="fixed inset-0 bg-white text-gray-900 flex flex-col opacity-0 invisible pointer-events-none transition-opacity duration-500 ease-expo" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="menu-heading">
+        <div class="flex flex-col min-h-full p-6 md:p-12">
+            <div class="flex justify-between items-start shrink-0">
+                <a href="index.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 leading-none" aria-label="Home">Bhumi</a>
+                <button type="button" id="menu-close" class="text-xs font-sans tracking-widest uppercase text-gray-900 hover:text-gold transition-colors duration-300">Close [×]</button>
+            </div>
+            <nav class="flex-1 flex flex-col justify-center items-center gap-6 md:flex-row md:flex-wrap md:justify-center md:items-center md:gap-8 lg:gap-10 py-12" aria-label="Primary">
+                <h2 id="menu-heading" class="sr-only">Site navigation</h2>
+                <a href="/work.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Work</a>
+                <a href="/info.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Info</a>
+                <a href="/notes.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Notes</a>
+                <a href="mailto:studio@bhumi.agency" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Contact</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Info — ~60/40; .info-layout uses embedded CSS so columns always work -->
+    <main class="info-main w-full pt-28 md:pt-36 pb-24 md:pb-40 px-6 md:px-12">
+        <div class="info-layout w-full">
+
+            <!-- Left ~60%: bio + editorial/clients -->
+            <div class="info-col-left info-body space-y-7">
+                <p>Bhumi Studio is a Paris and New York–based creative agency whose work moves between fashion editorial, art direction, and brand identity. The studio's practice is rooted in observation and restraint, capturing quiet moments of beauty with clarity and intention. Founded with a background in fine art and visual communication, Bhumi carries a sense of rhythm and lyricism—both personal and precise.</p>
+
+                <p>Now operating across continents, the studio approaches each project with a quiet curiosity, favoring natural light, fleeting gestures, and unscripted compositions. Bhumi's work reflects a sustained engagement with presence: an attempt to look closely, and with care.</p>
+
+                <p>The studio's projects explore themes of solitude, connection, memory, and place—shaped by the experience of working between cultures. Across personal and commissioned work, Bhumi maintains a consistent approach: imagery that feels lived-in and emotionally true, yet formally considered.</p>
+
+                <p>Bhumi's practice increasingly extends into film, spatial design, and longer-form narratives, returning to questions of home, identity, and the act of seeing.</p>
+
+                <div class="mt-12 md:mt-16 space-y-10">
+                    <div class="info-label-row">
+                        <h3 class="info-section-title pt-0.5">Editorial</h3>
+                        <p class="text-sm leading-relaxed text-ink min-w-0">Self Service, Holiday Magazine, Blau International, Crosscurrent, Harper's Bazaar, D Repubblica, Beyond Noise, Unemployed Magazine</p>
+                    </div>
+                    <div class="info-label-row">
+                        <h3 class="info-section-title pt-0.5">Clients</h3>
+                        <p class="text-sm leading-relaxed text-ink min-w-0">Louis Vuitton, Valentino, The Row, Chloé, Marc Jacobs, Uniqlo, COS, Hermès, Bottega Veneta, Acne Studios</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right ~40%: CV -->
+            <div class="info-col-right info-body space-y-12 md:space-y-14 text-sm leading-relaxed">
+
+                <!-- Education -->
+                <section>
+                    <h3 class="info-section-title">Education</h3>
+                    <div class="space-y-2.5">
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2019 – 2021</span>
+                            <span>Central Saint Martins, London, MA Communication Design</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2015 – 2018</span>
+                            <span>École des Beaux-Arts, Paris, BFA Visual Arts</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2018</span>
+                            <span>ISSP Summer School, Riga, Photography intensive</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exhibitions -->
+                <section>
+                    <h3 class="info-section-title">Exhibitions</h3>
+                    <div class="space-y-2.5">
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2025</span>
+                            <span>Group: <em>Surface Tension</em>, Palais de Tokyo, Paris, France</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2024</span>
+                            <span>Group: <em>Eastern European Beauty</em>, Capa Center, Budapest, Hungary</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2024</span>
+                            <span>Solo: <em>Quiet Hours</em>, New Galerie, Paris, France</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2023</span>
+                            <span>Group: <em>Like you and me</em>, Mai Mano House, Budapest, Hungary</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2023</span>
+                            <span>Group: <em>Rubus Discolor Project</em>, Portland, Oregon, USA</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2022</span>
+                            <span>Solo: <em>Parallax View</em>, New Galerie, Paris, France</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2021</span>
+                            <span>Group: <em>Art Market</em>, Freyler Art Gallery, Budapest, Hungary</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2021</span>
+                            <span>Group: <em>Modern Selection</em>, Royal Palace, Gödöllő, Hungary</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2020</span>
+                            <span>Group: <em>Isolation</em>, Millepiani, Rome, Italy</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2019</span>
+                            <span>Group: <em>Ural Vision Gallery</em>, Yekaterinburg, Russia</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2014</span>
+                            <span>Solo: <em>Revolution</em>, Tuda Gallery, Budapest, Hungary</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2012</span>
+                            <span>Solo: <em>Mainstream</em>, VAM Design Center, Budapest, Hungary</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Books & Publications -->
+                <section>
+                    <h3 class="info-section-title">Books & Publications</h3>
+                    <div class="space-y-2.5">
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2024</span>
+                            <span>Monograph: <em>Bhumi — Collected Works</em>, Self Published, Printed and bound in Paris, France</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2022</span>
+                            <span>Monograph: <em>Parallax View</em>, Self Published book, Printed and bound in Paris, France</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2021</span>
+                            <span>Monograph: <em>April Breeze</em>, Self Published Zine, Printed and bound in Brooklyn, NY</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2021</span>
+                            <span>Monograph: <em>Wombat Art Box</em>, Published by Wombat, Limited edition portfolio, Produced in Paris, France</span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2020</span>
+                            <span>Publication: <em>Portrait of Humanity</em>, Vol 2, Published by Hoxton Mini Press, London, UK</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Press -->
+                <section>
+                    <h3 class="info-section-title">Press</h3>
+                    <div class="space-y-2.5">
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2025</span>
+                            <span>Vogue France, <em>New Voices in Fashion Direction</em></span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2024</span>
+                            <span>WÜL Platform and Creative Collective, <em>Bhumi Studio</em></span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2023</span>
+                            <span>i-D Magazine, <em>Quiet Observation</em></span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2022</span>
+                            <span>It's Nice That, <em>Studio Profile: Bhumi</em></span>
+                        </div>
+                        <div class="info-cv-row">
+                            <span class="info-year shrink-0">2021</span>
+                            <span>A&T Talks, <em>Planning, Sequencing & Producing A Photo Zine</em></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contact -->
+                <section>
+                    <h3 class="info-section-title">Contact</h3>
+                    <div class="space-y-2 text-sm">
+                        <div><a href="mailto:studio@bhumi.agency" class="text-ink hover-underline pb-0.5 transition-colors hover:text-muted no-underline">studio@bhumi.agency</a></div>
+                        <div><a href="https://instagram.com/bhumistudio" class="text-ink hover-underline pb-0.5 transition-colors hover:text-muted no-underline" target="_blank" rel="noopener">Instagram</a></div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-ink/10 bg-base px-6 md:px-12 py-8 md:py-10" role="contentinfo" aria-label="Site footer">
+        <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <div class="font-sans text-xs tracking-widest uppercase text-gray-900">Bhumi</div>
+            <nav class="flex flex-wrap gap-x-8 gap-y-3 font-sans text-xs tracking-widest uppercase" aria-label="Footer navigation">
+                <a href="/work.html" class="text-muted hover:text-ink transition-colors">Work</a>
+                <a href="/info.html" class="text-muted hover:text-ink transition-colors">Info</a>
+                <a href="/notes.html" class="text-muted hover:text-ink transition-colors">Notes</a>
+                <a href="mailto:studio@bhumi.agency" class="text-muted hover:text-ink transition-colors">Contact</a>
+            </nav>
+        </div>
+        <p class="mt-6 font-sans text-[10px] tracking-widest uppercase text-muted">© 2026 Bhumi Studio</p>
+    </footer>
+
+    <script>
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', function(e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            if(cursorDot) { cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`; }
+            if(cursorOutline) { cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" }); }
+        });
+
+        const siteMenu = document.getElementById('site-menu');
+        const menuOpenBtn = document.getElementById('menu-open');
+        const menuCloseBtn = document.getElementById('menu-close');
+        function openSiteMenu() {
+            if (!siteMenu) return;
+            siteMenu.classList.add('menu-visible');
+            siteMenu.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('menu-open');
+            menuOpenBtn?.setAttribute('aria-expanded', 'true');
+            menuCloseBtn?.focus();
+        }
+        function closeSiteMenu() {
+            if (!siteMenu) return;
+            siteMenu.classList.remove('menu-visible');
+            siteMenu.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('menu-open');
+            menuOpenBtn?.setAttribute('aria-expanded', 'false');
+            menuOpenBtn?.focus();
+        }
+        menuOpenBtn?.addEventListener('click', openSiteMenu);
+        menuCloseBtn?.addEventListener('click', closeSiteMenu);
+        siteMenu?.querySelectorAll('a[href]').forEach(function(link) { link.addEventListener('click', function() { closeSiteMenu(); }); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && siteMenu?.classList.contains('menu-visible')) closeSiteMenu(); });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "repoRoot": "/Users/bjov/Desktop/Projects/AI Designer",
+  "cwd": "/Users/bjov/Desktop/Projects/AI Designer",
+  "stack": {
+    "frameworks": [],
+    "componentLibraries": [],
+    "styling": [],
+    "componentDirectories": [],
+    "packageFiles": []
+  },
+  "routes": [],
+  "tokens": {
+    "sources": [],
+    "tokens": []
+  },
+  "summary": "Repo root: /Users/bjov/Desktop/Projects/AI Designer\nWorking directory: /Users/bjov/Desktop/Projects/AI Designer\nFrameworks: none detected\nStyling: none detected\nComponent libraries: none detected\nRoute roots: none detected\nRoute candidates: none detected\nComponent directories: none detected\nToken sources: none detected\nVisible design language hints: no strong hints detected"
+}

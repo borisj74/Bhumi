@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHUMI | Talent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.3/index.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#F4F4F0',
+                        ink: '#111111',
+                        gold: '#C5A880',
+                        muted: '#8A8A8A'
+                    },
+                    fontFamily: {
+                        serif: ['"Bodoni Moda"', 'serif'],
+                        sans: ['"Geist Sans"', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F4F4F0; color: #111111; cursor: none; }
+        *, *::before, *::after { cursor: none !important; }
+        body.menu-open { overflow: hidden; }
+        #site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10000;
+            isolation: isolate;
+        }
+        #site-menu:not(.menu-visible) {
+            z-index: -1 !important;
+            pointer-events: none !important;
+        }
+        #site-menu.menu-visible {
+            z-index: 10050 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+        .hover-underline { position: relative; }
+        .hover-underline::after {
+            content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0;
+            background-color: #C5A880; transform: scaleX(0); transform-origin: bottom right;
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .hover-underline:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+    </style>
+</head>
+<body class="font-sans antialiased text-ink min-h-screen flex flex-col selection:bg-gold selection:text-base">
+
+    <div class="cursor-dot" style="position:fixed;top:0;left:0;transform:translate(-50%,-50%);border-radius:50%;z-index:99999;pointer-events:none;width:8px;height:8px;background-color:#C5A880;"></div>
+    <div class="cursor-outline" style="position:fixed;top:0;left:0;transform:translate(-50%,-50%);border-radius:50%;z-index:99999;pointer-events:none;width:44px;height:44px;border:1px solid rgba(17,17,17,0.35);transition:width .3s,height .3s,background-color .3s,border-color .3s;"></div>
+
+    <nav id="site-header" class="fixed top-0 left-0 w-full p-6 md:p-12 flex justify-between items-start pointer-events-none text-gray-900">
+        <div class="flex flex-col pointer-events-auto">
+            <a href="index.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 leading-none" aria-label="Home">Bhumi</a>
+            <span id="site-nav-times" class="text-[10px] font-sans text-gray-600 hidden md:block mt-8 text-left" aria-live="polite">
+                PARIS / <span id="site-time-paris">--:--</span><br>
+                NY / <span id="site-time-ny">--:--</span>
+            </span>
+        </div>
+        <div class="pointer-events-auto">
+            <button type="button" id="menu-open" class="text-xs font-sans tracking-widest uppercase text-gray-900 hover:text-gold transition-colors duration-300" aria-expanded="false" aria-controls="site-menu">Menu [=]</button>
+        </div>
+    </nav>
+
+    <div id="site-menu" class="fixed inset-0 bg-white text-gray-900 flex flex-col opacity-0 invisible pointer-events-none transition-opacity duration-500 ease-expo" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="flex flex-col min-h-full p-6 md:p-12">
+            <div class="flex justify-between items-start shrink-0">
+                <a href="index.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 leading-none" aria-label="Home">Bhumi</a>
+                <button type="button" id="menu-close" class="text-xs font-sans tracking-widest uppercase text-gray-900 hover:text-gold transition-colors duration-300">Close [×]</button>
+            </div>
+            <nav class="flex-1 flex flex-col justify-center items-center gap-6 md:flex-row md:flex-wrap md:justify-center md:items-center md:gap-8 lg:gap-10 py-12" aria-label="Primary">
+                <a href="/work.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Work</a>
+                <a href="index.html#about" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Info</a>
+                <a href="/notes.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Notes</a>
+                <a href="mailto:studio@visage.agency" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Contact</a>
+            </nav>
+        </div>
+    </div>
+
+    <main class="flex-1 flex flex-col justify-center items-center px-6 pt-32 pb-24 text-center">
+        <h1 class="font-serif text-4xl md:text-6xl italic mb-6">Talent</h1>
+        <p class="font-sans text-sm text-muted max-w-md mb-10">Roster and booking — coming next.</p>
+        <a href="index.html" class="text-xs font-sans tracking-widest uppercase hover-underline pb-2">Back to home</a>
+    </main>
+
+    <script>
+        (function initCursor() {
+            var dot = document.querySelector('.cursor-dot');
+            var outline = document.querySelector('.cursor-outline');
+            window.addEventListener('mousemove', function(e) {
+                var x = e.clientX, y = e.clientY;
+                if (dot) { dot.style.left = x + 'px'; dot.style.top = y + 'px'; }
+                if (outline) { outline.animate({ left: x + 'px', top: y + 'px' }, { duration: 500, fill: 'forwards' }); }
+            });
+        })();
+
+        (function initNavClock() {
+            var parisEl = document.getElementById('site-time-paris');
+            var nyEl = document.getElementById('site-time-ny');
+            if (!parisEl || !nyEl) return;
+            var fmtParis = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', hour12: false });
+            var fmtNy = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
+            function tick() {
+                var now = new Date();
+                parisEl.textContent = fmtParis.format(now);
+                nyEl.textContent = fmtNy.format(now);
+            }
+            tick();
+            setInterval(tick, 1000);
+        })();
+
+        const siteMenu = document.getElementById('site-menu');
+        const menuOpenBtn = document.getElementById('menu-open');
+        const menuCloseBtn = document.getElementById('menu-close');
+        function openSiteMenu() {
+            siteMenu?.classList.add('menu-visible');
+            siteMenu?.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('menu-open');
+            menuOpenBtn?.setAttribute('aria-expanded', 'true');
+        }
+        function closeSiteMenu() {
+            siteMenu?.classList.remove('menu-visible');
+            siteMenu?.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('menu-open');
+            menuOpenBtn?.setAttribute('aria-expanded', 'false');
+        }
+        menuOpenBtn?.addEventListener('click', openSiteMenu);
+        menuCloseBtn?.addEventListener('click', closeSiteMenu);
+        siteMenu?.querySelectorAll('a[href]').forEach(function(link) {
+            link.addEventListener('click', closeSiteMenu);
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && siteMenu?.classList.contains('menu-visible')) closeSiteMenu();
+        });
+    </script>
+</body>
+</html>

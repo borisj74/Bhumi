@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHUMI | Work</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.3/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/src/index.css" />
+    <style>
+        body {
+            background-color: #F4F4F0;
+            color: #111111;
+            cursor: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .hover-underline {
+            position: relative;
+        }
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: #C5A880;
+            transform-origin: bottom right;
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .hover-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 99999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #C5A880;
+        }
+        .cursor-outline {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(17, 17, 17, 0.35);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        *, *::before, *::after { cursor: none !important; }
+
+        #site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10000;
+            isolation: isolate;
+        }
+        #site-menu:not(.menu-visible) {
+            z-index: -1 !important;
+            pointer-events: none !important;
+        }
+        #site-menu.menu-visible {
+            z-index: 10050 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+
+        /*
+          Only the visible thumbnail frame receives pointer events — the rest of the grid
+          cell (margins around the half-width image) must not trigger preview (Éder-style).
+        */
+        #work-grid .work-item {
+            pointer-events: none;
+            transition: opacity 0.65s cubic-bezier(0.33, 0.12, 0.2, 1);
+        }
+        #work-grid .work-item .work-frame {
+            pointer-events: auto;
+        }
+
+        /* Compact thumbnails — narrower than before (was 50% of cell) to keep tiles visually separated */
+        .work-item .work-frame {
+            width: 100%;
+            max-width: min(100%, 280px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .work-item .work-frame {
+                width: 40%;
+                max-width: 200px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .work-item .work-frame {
+                width: 38%;
+                max-width: 220px;
+            }
+        }
+
+        /* Variable frame scales — breaks visual uniformity (paired with workGridData frameClass) */
+        .work-item .work-frame.work-frame--xs {
+            max-width: min(100%, 200px);
+        }
+        @media (min-width: 768px) {
+            .work-item .work-frame.work-frame--xs {
+                width: 28%;
+                max-width: 128px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .work-item .work-frame.work-frame--xs {
+                width: 26%;
+                max-width: 148px;
+            }
+        }
+
+        .work-item .work-frame.work-frame--s {
+            max-width: min(100%, 240px);
+        }
+        @media (min-width: 768px) {
+            .work-item .work-frame.work-frame--s {
+                width: 34%;
+                max-width: 168px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .work-item .work-frame.work-frame--s {
+                width: 32%;
+                max-width: 188px;
+            }
+        }
+
+        .work-item .work-frame.work-frame--l {
+            max-width: min(100%, 320px);
+        }
+        @media (min-width: 768px) {
+            .work-item .work-frame.work-frame--l {
+                width: 46%;
+                max-width: 232px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .work-item .work-frame.work-frame--l {
+                width: 44%;
+                max-width: 260px;
+            }
+        }
+
+        .work-item .work-frame.work-frame--xl {
+            max-width: min(100%, 360px);
+        }
+        @media (min-width: 768px) {
+            .work-item .work-frame.work-frame--xl {
+                width: 52%;
+                max-width: 260px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .work-item .work-frame.work-frame--xl {
+                width: 50%;
+                max-width: 300px;
+            }
+        }
+
+        /*
+          Default frame = medium. Full-width grid cells are for layout rhythm;
+          larger variants stay capped so portrait tiles do not dominate the viewport.
+        */
+
+        .work-item img {
+            transition: transform 0.75s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        /* Subtle lift only — no scale bleed into adjacent staggered cells */
+        .work-grid:not(.work-grid--hover) .work-item:hover img {
+            transform: translateY(-2px);
+        }
+
+        /*
+          Backdrop lives inside #work-grid-wrap (first child) so it stacks below #work-grid.
+          Dimmed tiles use visibility:hidden; pointer passes through to the section/grid,
+          not "through" the main box. When visible, backdrop uses pointer-events:auto so
+          the full-screen preview still counts as inside the work area and receives clicks.
+        */
+        /* Smooth full-screen preview fades */
+        #work-hover-backdrop {
+            --work-preview-fade: 0.65s;
+            --work-preview-ease: cubic-bezier(0.33, 0.12, 0.2, 1);
+            z-index: 1;
+            background-color: #0a0a0a;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition:
+                opacity var(--work-preview-fade) var(--work-preview-ease),
+                visibility 0s linear var(--work-preview-fade);
+        }
+        #work-hover-backdrop.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition:
+                opacity var(--work-preview-fade) var(--work-preview-ease),
+                visibility 0s;
+        }
+        #work-hover-backdrop.work-hover-backdrop--instant {
+            transition: none !important;
+        }
+        /* Full-bleed: image covers entire viewport (object-fit: cover + overscan for parallax) */
+        #work-hover-backdrop-img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 115%;
+            height: 115%;
+            min-width: 115%;
+            min-height: 115%;
+            max-width: none;
+            object-fit: cover;
+            object-position: center;
+            will-change: transform;
+        }
+
+        #work-grid {
+            position: relative;
+            z-index: 2;
+        }
+
+        .work-item.work-item--dimmed {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transition:
+                opacity 0.65s cubic-bezier(0.33, 0.12, 0.2, 1),
+                visibility 0s linear 0.65s;
+        }
+        .work-item.work-item--active {
+            position: relative;
+            z-index: 10;
+            isolation: isolate;
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Pinned via JS while preview is open — stays viewport-fixed so it does not scroll with the page */
+        .work-frame.work-frame--pinned {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        #work-grid-wrap {
+            position: relative;
+            z-index: 50;
+            background-color: transparent;
+            isolation: isolate;
+        }
+
+    </style>
+</head>
+<body class="font-sans antialiased text-ink relative selection:bg-gold selection:text-base">
+
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <nav id="site-header" class="fixed top-0 left-0 w-full p-6 md:p-12 flex justify-between items-start pointer-events-none text-gray-900">
+        <div class="flex flex-col pointer-events-auto">
+            <a href="index.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 leading-none" aria-label="Home">Bhumi</a>
+            <span id="site-nav-times" class="text-[10px] font-sans text-gray-600 hidden md:block mt-8 text-left" aria-live="polite">
+                PARIS / <span id="site-time-paris">--:--</span><br>
+                NY / <span id="site-time-ny">--:--</span>
+            </span>
+        </div>
+
+        <div class="flex flex-col items-end gap-2 pointer-events-auto">
+            <button type="button" id="menu-open" class="text-xs font-sans tracking-widest uppercase text-gray-900 hover:text-gold transition-colors duration-300" aria-expanded="false" aria-controls="site-menu">Menu [=]</button>
+            <span class="text-[10px] font-sans text-gray-600 hidden md:block mt-8 text-right">
+                PARIS / 48°52'5"N<br>
+                NY / 40°42'46"N
+            </span>
+        </div>
+    </nav>
+
+    <div id="site-menu" class="fixed inset-0 bg-white text-gray-900 flex flex-col opacity-0 invisible pointer-events-none transition-opacity duration-500 ease-expo" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="menu-heading">
+        <div class="flex flex-col min-h-full p-6 md:p-12">
+            <div class="flex justify-between items-start shrink-0">
+                <a href="index.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 leading-none" aria-label="Home">Bhumi</a>
+                <button type="button" id="menu-close" class="text-xs font-sans tracking-widest uppercase text-gray-900 hover:text-gold transition-colors duration-300">Close [×]</button>
+            </div>
+            <nav class="flex-1 flex flex-col justify-center items-center gap-6 md:flex-row md:flex-wrap md:justify-center md:items-center md:gap-8 lg:gap-10 py-12" aria-label="Primary">
+                <h2 id="menu-heading" class="sr-only">Site navigation</h2>
+                <a href="work.html" class="font-sans text-xs tracking-widest uppercase text-gold hover:text-gray-900 transition-colors" aria-current="page">Work</a>
+                <a href="/info.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Info</a>
+                <a href="/notes.html" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Notes</a>
+                <a href="mailto:studio@visage.agency" class="font-sans text-xs tracking-widest uppercase text-gray-900 hover:text-gold transition-colors">Contact</a>
+            </nav>
+        </div>
+    </div>
+
+    <main id="work-grid-wrap" class="pt-28 md:pt-32 pb-24 md:pb-32">
+        <!-- Full-screen preview: same image as hovered tile; stacked under #work-grid inside main -->
+        <div id="work-hover-backdrop" class="fixed inset-0 overflow-hidden" aria-hidden="true">
+            <img id="work-hover-backdrop-img" src="" alt="" class="absolute object-cover" decoding="async" />
+        </div>
+        <!-- Portrait tiles: React (Framer Motion + shuffle); hover preview in work-hover.ts -->
+        <div id="work-grid-root"></div>
+    </main>
+
+    <script type="module" src="/src/work-main.tsx"></script>
+</body>
+</html>

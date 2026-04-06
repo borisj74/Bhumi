@@ -1,0 +1,460 @@
+<!--
+aesthetic_dna: Editorial Luxury / Brutalist Elegance. 
+ui_paradigm: Asymmetric Editorial Scrolling Canvas.
+palette_choice: Off-White Base (#F4F4F0), Near-Black Ink (#111111), Warm Muted Gold (#C5A880).
+-->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISAGE | High-End Fashion Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#F4F4F0',
+                        ink: '#111111',
+                        gold: '#C5A880',
+                        muted: '#8A8A8A'
+                    },
+                    fontFamily: {
+                        serif: ['"Bodoni Moda"', 'serif'],
+                        sans: ['"Manrope"', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        tighter: '-0.04em',
+                        widest: '0.2em',
+                    },
+                    transitionTimingFunction: {
+                        'expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F4F4F0;
+            color: #111111;
+            cursor: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1px #111111;
+        }
+        
+        .stark-bw {
+            filter: grayscale(100%) contrast(115%) brightness(90%);
+            transition: filter 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .image-container:hover .stark-bw {
+            filter: grayscale(80%) contrast(105%) brightness(100%);
+        }
+
+        .hover-underline {
+            position: relative;
+        }
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: #C5A880;
+            transform-origin: bottom right;
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .hover-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #C5A880;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(17, 17, 17, 0.3);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        .roster-scroll {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .roster-item {
+            scroll-snap-align: start;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-100%); }
+            50% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+        .writing-vertical-rl { writing-mode: vertical-rl; }
+    </style>
+</head>
+<body class="font-sans antialiased text-ink relative selection:bg-gold selection:text-base">
+
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 p-6 md:p-12 flex justify-between items-start pointer-events-none mix-blend-difference text-base">
+        <a href="#" class="font-serif text-2xl md:text-3xl tracking-tighter pointer-events-auto leading-none">Visage.</a>
+        
+        <div class="flex flex-col items-end gap-2 pointer-events-auto">
+            <button class="text-xs font-sans tracking-widest uppercase hover:text-gold transition-colors duration-300">Menu [=]</button>
+            <span class="text-[10px] font-sans text-base/50 hidden md:block mt-8 text-right">
+                PARIS / 48°52'5"N<br>
+                NY / 40°42'46"N
+            </span>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="relative w-full h-[100svh] min-h-[700px] flex flex-col justify-end p-6 md:p-12 overflow-hidden">
+        
+        <div class="absolute inset-0 z-0 flex items-center justify-end pr-0 md:pr-[10%]">
+            <div class="w-full md:w-[45%] h-[70vh] md:h-[85vh] relative image-container overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80" 
+                     alt="Avant-garde female model in stark lighting" 
+                     class="w-full h-full object-cover object-top stark-bw scale-105 hover:scale-100 transition-transform duration-[1.5s] ease-expo">
+            </div>
+        </div>
+
+        <div class="relative z-10 w-full mb-12 md:mb-0">
+            <p class="font-sans text-xs md:text-sm tracking-widest uppercase mb-6 md:mb-12 max-w-xs text-ink bg-base/80 p-2 md:p-0 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none">
+                Cultivating the next era<br>of <i class="font-serif normal-case text-gold text-lg">sartorial</i> expression.
+            </p>
+            
+            <h1 class="font-serif text-[18vw] md:text-[14vw] leading-[0.75] tracking-tighter uppercase m-0 p-0 mix-blend-exclusion text-base">
+                Avant<br>
+                <span class="pl-[10vw] md:pl-[20vw] text-outline text-transparent block mt-2 md:mt-0">Garde</span>
+            </h1>
+        </div>
+
+        <div class="absolute bottom-6 md:bottom-12 right-6 md:right-12 z-10 flex flex-col items-center gap-4">
+            <span class="writing-vertical-rl text-[10px] tracking-widest uppercase font-sans text-ink/50 rotate-180">Scroll</span>
+            <div class="w-[1px] h-12 bg-ink/20 relative overflow-hidden">
+                <div class="w-full h-full bg-ink absolute top-0 left-0 -translate-y-full animate-[slideDown_2s_ease-in-out_infinite]"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Manifesto -->
+    <section class="py-24 md:py-40 px-6 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-12 bg-base border-t border-ink/10">
+        <h2 class="font-serif text-3xl md:text-5xl lg:text-7xl leading-[1.1] tracking-tight max-w-4xl">
+            We operate at the intersection of <em class="text-gold italic">raw aesthetic tension</em> and commercial dominance.
+        </h2>
+        <a href="#contact" class="shrink-0 text-sm font-sans tracking-widest uppercase hover-underline pb-2 group">
+            Inquire <i class="ph ph-arrow-right inline-block ml-2 group-hover:translate-x-2 transition-transform"></i>
+        </a>
+    </section>
+
+    <!-- Campaigns Grid -->
+    <section class="py-24 px-6 md:px-12 w-full max-w-[1800px] mx-auto">
+        <div class="flex justify-between items-end mb-20 border-b border-ink/10 pb-8">
+            <h3 class="font-sans text-xs tracking-widest uppercase text-muted">Selected Archives</h3>
+            <span class="font-serif text-4xl">01</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-y-24 md:gap-x-12 lg:gap-x-24">
+            
+            <article class="md:col-span-7 group cursor-pointer image-container">
+                <div class="relative overflow-hidden w-full aspect-[3/4] mb-6 block">
+                    <div class="absolute inset-0 bg-ink/5 group-hover:bg-transparent transition-colors z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1549439602-43ebca2327af?auto=format&fit=crop&w=1200&q=80" 
+                         alt="Maison Margiela inspired editorial campaign shoot" 
+                         class="w-full h-full object-cover stark-bw scale-105 group-hover:scale-100 transition-transform duration-1000 ease-expo">
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-serif text-2xl md:text-4xl mb-2">Nocturne Fall '24</h4>
+                        <p class="font-sans text-sm text-muted">Art Direction & Casting</p>
+                    </div>
+                    <span class="font-sans text-xs border border-ink/20 px-3 py-1 rounded-full">Paris</span>
+                </div>
+            </article>
+
+            <article class="md:col-span-5 md:mt-[20%] group cursor-pointer image-container">
+                <div class="relative overflow-hidden w-full aspect-[4/5] mb-6 block">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80" 
+                         alt="High contrast Vogue style fashion portrait" 
+                         class="w-full h-full object-cover stark-bw scale-105 group-hover:scale-100 transition-transform duration-1000 ease-expo">
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-serif text-2xl md:text-4xl mb-2">L'Étoile Rouge</h4>
+                        <p class="font-sans text-sm text-muted">Global Campaign</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="md:col-span-12 md:mt-24 group cursor-pointer image-container flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-2/3 relative overflow-hidden aspect-[16/9]">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80" 
+                         alt="Wide shot runway or location fashion editorial" 
+                         class="w-full h-full object-cover stark-bw scale-105 group-hover:scale-100 transition-transform duration-1000 ease-expo object-center">
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h4 class="font-serif text-3xl md:text-5xl mb-4">SSENSE Exclusives</h4>
+                    <p class="font-sans text-sm text-muted mb-8 max-w-sm leading-relaxed">
+                        A brutalist approach to modern silhouette distribution, executed across 14 international territories.
+                    </p>
+                    <span class="text-xs font-sans tracking-widest uppercase border-b border-ink pb-1 group-hover:text-gold group-hover:border-gold transition-colors">View Case Study</span>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="py-24 bg-ink text-base px-6 md:px-12 selection:bg-base selection:text-ink">
+        <div class="max-w-[1800px] mx-auto">
+            
+            <div class="flex justify-between items-end mb-16 md:mb-32 border-b border-base/20 pb-8">
+                <h3 class="font-sans text-xs tracking-widest uppercase text-base/50">Disciplines</h3>
+                <span class="font-serif text-4xl text-base/50">02</span>
+            </div>
+
+            <ul class="flex flex-col w-full">
+                <li class="group border-b border-base/10 hover:border-gold transition-colors duration-500 relative cursor-pointer py-10 md:py-16 flex justify-between items-center sm:items-end flex-col sm:flex-row gap-6 sm:gap-0">
+                    <div class="flex items-start gap-8 md:gap-16 w-full sm:w-auto">
+                        <span class="font-serif text-2xl md:text-4xl text-base/20 group-hover:text-gold transition-colors">01</span>
+                        <h4 class="font-serif text-4xl md:text-6xl lg:text-8xl tracking-tight group-hover:translate-x-4 transition-transform duration-500 ease-expo">Art Direction</h4>
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right overflow-hidden">
+                        <p class="font-sans text-sm text-base/60 max-w-xs translate-y-full group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-expo">
+                            Defining the visual vernacular for global luxury houses through rigorous conceptualization.
+                        </p>
+                    </div>
+                </li>
+
+                <li class="group border-b border-base/10 hover:border-gold transition-colors duration-500 relative cursor-pointer py-10 md:py-16 flex justify-between items-center sm:items-end flex-col sm:flex-row gap-6 sm:gap-0">
+                    <div class="flex items-start gap-8 md:gap-16 w-full sm:w-auto">
+                        <span class="font-serif text-2xl md:text-4xl text-base/20 group-hover:text-gold transition-colors">02</span>
+                        <h4 class="font-serif text-4xl md:text-6xl lg:text-8xl tracking-tight group-hover:translate-x-4 transition-transform duration-500 ease-expo">Runway Casting</h4>
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right overflow-hidden">
+                        <p class="font-sans text-sm text-base/60 max-w-xs translate-y-full group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-expo">
+                            Curating faces that dictate the cultural zeitgeist. Exclusive representation and scouting.
+                        </p>
+                    </div>
+                </li>
+
+                <li class="group border-b border-base/10 hover:border-gold transition-colors duration-500 relative cursor-pointer py-10 md:py-16 flex justify-between items-center sm:items-end flex-col sm:flex-row gap-6 sm:gap-0">
+                    <div class="flex items-start gap-8 md:gap-16 w-full sm:w-auto">
+                        <span class="font-serif text-2xl md:text-4xl text-base/20 group-hover:text-gold transition-colors">03</span>
+                        <h4 class="font-serif text-4xl md:text-6xl lg:text-8xl tracking-tight group-hover:translate-x-4 transition-transform duration-500 ease-expo">Brand Identity</h4>
+                    </div>
+                    <div class="w-full sm:w-auto text-left sm:text-right overflow-hidden">
+                        <p class="font-sans text-sm text-base/60 max-w-xs translate-y-full group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-expo">
+                            Typographic systems, packaging, and spatial design tailored for the avant-garde.
+                        </p>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </section>
+
+    <!-- Talent Roster -->
+    <section class="py-32 overflow-hidden bg-base relative">
+        <div class="px-6 md:px-12 max-w-[1800px] mx-auto mb-16 flex justify-between items-center">
+            <h3 class="font-serif text-4xl md:text-5xl">The Faces.</h3>
+            <div class="flex gap-4">
+                <button class="w-10 h-10 rounded-full border border-ink/20 flex items-center justify-center hover:bg-ink hover:text-base transition-colors">
+                    <i class="ph ph-arrow-left"></i>
+                </button>
+                <button class="w-10 h-10 rounded-full border border-ink/20 flex items-center justify-center hover:bg-ink hover:text-base transition-colors">
+                    <i class="ph ph-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex gap-6 md:gap-12 px-6 md:px-12 overflow-x-auto roster-scroll pb-12 cursor-grab active:cursor-grabbing">
+            
+            <div class="roster-item w-[280px] md:w-[380px] shrink-0 group image-container relative">
+                <div class="w-full aspect-[2/3] overflow-hidden bg-ink/5 mb-4 relative">
+                    <div class="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 mix-blend-color"></div>
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80" alt="Model portrait Elena" class="w-full h-full object-cover stark-bw scale-100 group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="flex justify-between items-center border-t border-ink/20 pt-4">
+                    <h5 class="font-serif text-xl">Elena V.</h5>
+                    <span class="font-sans text-[10px] uppercase tracking-widest text-muted">Paris</span>
+                </div>
+            </div>
+
+            <div class="roster-item w-[280px] md:w-[380px] shrink-0 group image-container relative mt-12 md:mt-24">
+                <div class="w-full aspect-[2/3] overflow-hidden bg-ink/5 mb-4 relative">
+                    <div class="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 mix-blend-color"></div>
+                    <img src="https://images.unsplash.com/photo-1517400508447-f8dd518b86db?auto=format&fit=crop&w=600&q=80" alt="Model portrait Kaleb" class="w-full h-full object-cover stark-bw scale-100 group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="flex justify-between items-center border-t border-ink/20 pt-4">
+                    <h5 class="font-serif text-xl">Kaleb M.</h5>
+                    <span class="font-sans text-[10px] uppercase tracking-widest text-muted">London</span>
+                </div>
+            </div>
+
+            <div class="roster-item w-[280px] md:w-[380px] shrink-0 group image-container relative">
+                <div class="w-full aspect-[2/3] overflow-hidden bg-ink/5 mb-4 relative">
+                    <div class="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 mix-blend-color"></div>
+                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80" alt="Model portrait Sora" class="w-full h-full object-cover stark-bw scale-100 group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="flex justify-between items-center border-t border-ink/20 pt-4">
+                    <h5 class="font-serif text-xl">Sora C.</h5>
+                    <span class="font-sans text-[10px] uppercase tracking-widest text-muted">Tokyo</span>
+                </div>
+            </div>
+
+            <div class="roster-item w-[280px] md:w-[380px] shrink-0 group image-container relative mt-12 md:mt-24">
+                <div class="w-full aspect-[2/3] overflow-hidden bg-ink/5 mb-4 relative">
+                    <div class="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 mix-blend-color"></div>
+                    <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?auto=format&fit=crop&w=600&q=80" alt="Model portrait Amina" class="w-full h-full object-cover stark-bw scale-100 group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="flex justify-between items-center border-t border-ink/20 pt-4">
+                    <h5 class="font-serif text-xl">Amina D.</h5>
+                    <span class="font-sans text-[10px] uppercase tracking-widest text-muted">New York</span>
+                </div>
+            </div>
+            
+            <div class="w-[6vw] shrink-0"></div>
+
+        </div>
+    </section>
+
+    <!-- Client Marquee -->
+    <section class="py-12 border-y border-ink/10 bg-base overflow-hidden flex whitespace-nowrap">
+        <div class="animate-marquee flex gap-12 md:gap-24 items-center">
+            <div class="flex gap-12 md:gap-24 items-center font-sans tracking-widest text-sm md:text-xl font-medium text-ink/40 uppercase">
+                <span class="hover:text-ink transition-colors cursor-default">Vogue Paris</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Balenciaga</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Dazed & Confused</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">SSENSE</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Maison Margiela</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Acne Studios</span>
+            </div>
+            <div class="flex gap-12 md:gap-24 items-center font-sans tracking-widest text-sm md:text-xl font-medium text-ink/40 uppercase">
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Vogue Paris</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Balenciaga</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Dazed & Confused</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">SSENSE</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Maison Margiela</span>
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="hover:text-ink transition-colors cursor-default">Acne Studios</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Footer -->
+    <footer id="contact" class="bg-ink text-base pt-32 pb-12 px-6 md:px-12 relative overflow-hidden selection:bg-base selection:text-ink">
+        <div class="max-w-[1800px] mx-auto relative z-10 flex flex-col h-full justify-between gap-24">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0">
+                <div class="col-span-1">
+                    <h5 class="font-sans text-xs tracking-widest uppercase text-base/50 mb-6">Inquiries</h5>
+                    <a href="mailto:studio@visage.agency" class="font-serif text-2xl md:text-3xl hover:text-gold transition-colors block mb-2">studio@visage.agency</a>
+                    <a href="tel:+33140200000" class="font-serif text-xl text-base/70 hover:text-base transition-colors">+33 1 40 20 00 00</a>
+                </div>
+
+                <div class="col-span-1 md:mx-auto">
+                    <h5 class="font-sans text-xs tracking-widest uppercase text-base/50 mb-6">Headquarters</h5>
+                    <address class="font-sans text-sm text-base/80 not-italic leading-relaxed">
+                        14 Rue de Castiglione<br>
+                        75001 Paris, France<br>
+                        <br>
+                        <span class="text-base/40">By appointment only.</span>
+                    </address>
+                </div>
+
+                <div class="col-span-1 md:text-right">
+                    <h5 class="font-sans text-xs tracking-widest uppercase text-base/50 mb-6">Network</h5>
+                    <ul class="flex flex-col gap-2 font-sans text-sm md:items-end">
+                        <li><a href="#" class="hover-underline inline-block pb-1">Instagram</a></li>
+                        <li><a href="#" class="hover-underline inline-block pb-1">LinkedIn</a></li>
+                        <li><a href="#" class="hover-underline inline-block pb-1">Models.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="w-full border-t border-base/20 pt-12 flex flex-col md:flex-row justify-between items-center sm:items-end gap-6 text-center md:text-left">
+                <span class="font-sans text-xs text-base/50 tracking-widest uppercase">&copy; 2024 Visage Editorial</span>
+                <span class="font-serif text-[15vw] leading-[0.7] tracking-tighter mix-blend-difference pointer-events-none text-base">
+                    VISAGE<span class="text-gold">.</span>
+                </span>
+                <span class="font-sans text-xs text-base/50 tracking-widest uppercase">Terms & Privacy</span>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', function(e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            if(cursorDot) {
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+            }
+
+            if(cursorOutline) {
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 500, fill: "forwards" });
+            }
+        });
+    </script>
+</body>
+</html>

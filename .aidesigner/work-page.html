@@ -1,0 +1,359 @@
+<!--
+  aesthetic_dna: Editorial, Brutalist-Elegance, Architectural Minimalism
+  ui_paradigm: Asymmetrical Masonry / Magazine Spread
+  palette: Off-White (#F4F4F0), Near-Black Ink (#111111), Muted Gold Accent (#C5A880)
+-->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISAGE | Selected Work</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        visage: {
+                            bg: '#F4F4F0',
+                            ink: '#111111',
+                            gold: '#C5A880',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Bodoni Moda"', 'serif'],
+                        sans: ['"Manrope"', 'sans-serif'],
+                    },
+                    transitionTimingFunction: {
+                        'expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        ::selection {
+            background-color: #111111;
+            color: #F4F4F0;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F4F4F0; }
+        ::-webkit-scrollbar-thumb { background: #111111; }
+
+        .project-card .img-container img {
+            filter: grayscale(100%);
+            transform: scale(1.01);
+            transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .project-card:hover .img-container img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .project-card .overlay {
+            background: linear-gradient(to top, rgba(17,17,17,0.7) 0%, rgba(17,17,17,0) 50%);
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .project-card:hover .overlay {
+            opacity: 1;
+        }
+
+        .project-card .overlay-content {
+            transform: translateY(15px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+        }
+        .project-card:hover .overlay-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .filter-link {
+            position: relative;
+        }
+        .filter-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .filter-link:hover::after, .filter-link.active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .footer-logo {
+            font-size: clamp(3rem, 15vw, 15rem);
+            line-height: 0.8;
+            letter-spacing: -0.02em;
+        }
+
+        .aspect-portrait { aspect-ratio: 3/4; }
+        .aspect-landscape { aspect-ratio: 4/3; }
+        .aspect-square { aspect-ratio: 1/1; }
+        .aspect-cinema { aspect-ratio: 21/9; }
+        .aspect-tall { aspect-ratio: 9/16; }
+    </style>
+</head>
+<body class="bg-visage-bg text-visage-ink font-sans antialiased overflow-x-hidden selection:bg-visage-ink selection:text-visage-bg">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 mix-blend-difference text-visage-bg pointer-events-none">
+        <a href="#" class="font-serif text-2xl tracking-tight uppercase pointer-events-auto">Visage</a>
+        <button class="font-sans text-[11px] uppercase tracking-[0.15em] font-medium pointer-events-auto hover:text-visage-gold transition-colors">Menu</button>
+    </nav>
+
+    <main class="pt-32 pb-40">
+        
+        <!-- Header & Filters -->
+        <header class="max-w-[1600px] mx-auto px-6 md:px-12 mb-20 md:mb-32">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-visage-ink/10 pb-8">
+                
+                <div class="flex items-start gap-4">
+                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight italic pr-4">Selected Work</h1>
+                    <span class="font-sans text-xs md:text-sm font-medium tracking-wide mt-2 md:mt-4 text-visage-ink/60">[ 88 Projects ]</span>
+                </div>
+
+                <ul class="flex flex-wrap items-center gap-6 md:gap-8 font-sans text-xs uppercase tracking-[0.15em] text-visage-ink/60">
+                    <li><button class="filter-link active text-visage-ink">All</button></li>
+                    <li><button class="filter-link hover:text-visage-ink transition-colors">Editorial</button></li>
+                    <li><button class="filter-link hover:text-visage-ink transition-colors">Runway</button></li>
+                    <li><button class="filter-link hover:text-visage-ink transition-colors">Campaign</button></li>
+                    <li><button class="filter-link hover:text-visage-ink transition-colors">Commercial</button></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- Asymmetric Grid -->
+        <section class="max-w-[1600px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-24 md:gap-y-0">
+
+            <!-- 01: Large Portrait, Left -->
+            <article class="project-card group md:col-span-6 md:col-start-1 md:mb-32 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 01</span><span>2024</span>
+                </div>
+                <div class="img-container relative w-full aspect-portrait overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80" alt="Model portrait" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-8 flex flex-col justify-end">
+                        <div class="overlay-content flex justify-between items-end w-full">
+                            <div>
+                                <span class="block font-sans text-[10px] uppercase tracking-[0.2em] mb-3 text-visage-gold">Editorial</span>
+                                <h2 class="font-serif text-4xl md:text-5xl italic leading-none">The Void Collection</h2>
+                            </div>
+                            <i class="ph ph-arrow-up-right text-3xl text-visage-bg group-hover:text-visage-gold transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 02: Small Landscape, Right Pushed Down -->
+            <article class="project-card group md:col-span-4 md:col-start-8 md:mt-48 md:mb-16 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 02</span><span>2023</span>
+                </div>
+                <div class="img-container relative w-full aspect-landscape overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1000&q=80" alt="Desert landscape fashion" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-6 flex flex-col justify-end">
+                        <div class="overlay-content flex justify-between items-end w-full">
+                            <div>
+                                <span class="block font-sans text-[10px] uppercase tracking-[0.2em] mb-2 text-visage-gold">Campaign</span>
+                                <h2 class="font-serif text-2xl md:text-3xl italic leading-none">Sands & Silk</h2>
+                            </div>
+                            <i class="ph ph-arrow-up-right text-2xl text-visage-bg group-hover:text-visage-gold transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 03: Square, Center Left -->
+            <article class="project-card group md:col-span-5 md:col-start-2 md:-mt-16 md:mb-40 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 03</span><span>2024</span>
+                </div>
+                <div class="img-container relative w-full aspect-square overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80" alt="Model walking" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-8 flex flex-col justify-end">
+                        <div class="overlay-content flex justify-between items-end w-full">
+                            <div>
+                                <span class="block font-sans text-[10px] uppercase tracking-[0.2em] mb-3 text-visage-gold">Runway</span>
+                                <h2 class="font-serif text-3xl md:text-4xl italic leading-none">Motion SS24</h2>
+                            </div>
+                            <i class="ph ph-arrow-up-right text-3xl text-visage-bg group-hover:text-visage-gold transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 04: Tall Profile, Far Right -->
+            <article class="project-card group md:col-span-4 md:col-start-9 md:-mt-32 md:mb-32 cursor-pointer flex flex-col gap-3 z-10 relative">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 04</span><span>2023</span>
+                </div>
+                <div class="img-container relative w-full aspect-tall overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80" alt="Fabric detail" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-6 flex flex-col justify-end">
+                        <div class="overlay-content flex justify-between items-end w-full">
+                            <div>
+                                <span class="block font-sans text-[10px] uppercase tracking-[0.2em] mb-2 text-visage-gold">Commercial</span>
+                                <h2 class="font-serif text-2xl italic leading-none">Tactile</h2>
+                            </div>
+                            <i class="ph ph-arrow-up-right text-2xl text-visage-bg group-hover:text-visage-gold transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 05: Hero Cinematic Breakout -->
+            <article class="project-card group md:col-span-10 md:col-start-2 md:mb-40 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 05</span><span>2024</span>
+                </div>
+                <div class="img-container relative w-full aspect-cinema md:aspect-[2.5/1] overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1512413914421-4f169213db60?auto=format&fit=crop&w=2000&q=80" alt="Wide runway shot" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-8 md:p-12 flex flex-col justify-end">
+                        <div class="overlay-content flex flex-col md:flex-row md:justify-between md:items-end w-full gap-4">
+                            <div>
+                                <span class="block font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] mb-3 md:mb-4 text-visage-gold">Runway // Archive</span>
+                                <h2 class="font-serif text-4xl md:text-6xl italic leading-none">Architecture Space</h2>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="hidden md:inline-block font-sans text-xs uppercase tracking-widest">View Project</span>
+                                <i class="ph ph-arrow-up-right text-3xl md:text-4xl text-visage-bg group-hover:text-visage-gold transition-colors bg-visage-ink/50 backdrop-blur-sm p-4 rounded-full"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 06: Narrow Portrait, Left -->
+            <article class="project-card group md:col-span-3 md:col-start-2 md:mb-20 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 06</span><span>2022</span>
+                </div>
+                <div class="img-container relative w-full aspect-[2/3] overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=800&q=80" alt="Avant-garde portrait" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-6 flex flex-col justify-end">
+                        <div class="overlay-content">
+                            <span class="block font-sans text-[9px] uppercase tracking-[0.2em] mb-2 text-visage-gold">Editorial</span>
+                            <h2 class="font-serif text-2xl italic leading-none">Neon Suburbia</h2>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 07: Landscape, Center Right -->
+            <article class="project-card group md:col-span-6 md:col-start-6 md:-mt-24 md:mb-32 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 07</span><span>2024</span>
+                </div>
+                <div class="img-container relative w-full aspect-landscape overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1200&q=80" alt="Studio shot" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-8 flex flex-col justify-end">
+                        <div class="overlay-content flex justify-between items-end w-full">
+                            <div>
+                                <span class="block font-sans text-[10px] uppercase tracking-[0.2em] mb-3 text-visage-gold">Commercial</span>
+                                <h2 class="font-serif text-3xl md:text-4xl italic leading-none">Studio Forma</h2>
+                            </div>
+                            <i class="ph ph-arrow-up-right text-3xl text-visage-bg group-hover:text-visage-gold transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 08: Closing Portrait -->
+            <article class="project-card group md:col-span-5 md:col-start-5 mb-12 cursor-pointer flex flex-col gap-3">
+                <div class="flex justify-between items-end font-sans text-[10px] uppercase tracking-widest text-visage-ink/50 px-1">
+                    <span>№ 08</span><span>2024</span>
+                </div>
+                <div class="img-container relative w-full aspect-[4/5] overflow-hidden bg-[#e0e0dc]">
+                    <img src="https://images.unsplash.com/photo-1520975954732-57dd22299614?auto=format&fit=crop&w=1200&q=80" alt="Architectural fashion" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                    <div class="overlay absolute inset-0 text-visage-bg p-8 flex flex-col justify-end">
+                        <div class="overlay-content flex justify-between items-end w-full">
+                            <div>
+                                <span class="block font-sans text-[10px] uppercase tracking-[0.2em] mb-3 text-visage-gold">Campaign</span>
+                                <h2 class="font-serif text-3xl md:text-5xl italic leading-none">Brutalism & Silk</h2>
+                            </div>
+                            <i class="ph ph-arrow-up-right text-3xl text-visage-bg group-hover:text-visage-gold transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- Load More -->
+        <div class="mt-24 mb-12 flex justify-center">
+            <button class="group flex flex-col items-center gap-4 font-sans text-xs uppercase tracking-widest text-visage-ink hover:text-visage-gold transition-colors">
+                <span>Discover More Archive</span>
+                <i class="ph ph-arrow-down text-xl group-hover:translate-y-2 transition-transform duration-300"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-visage-ink text-visage-bg pt-24 pb-8 overflow-hidden rounded-t-[2.5rem]">
+        <div class="max-w-[1600px] mx-auto px-6 md:px-12 flex flex-col">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-visage-bg/20 pb-16 mb-16">
+                <div class="md:col-span-2">
+                    <h3 class="font-serif italic text-2xl mb-6">Inquiries & Representation</h3>
+                    <a href="mailto:studio@visageagency.com" class="font-sans text-lg md:text-xl font-light hover:text-visage-gold transition-colors filter-link inline-block">studio@visageagency.com</a>
+                    <p class="font-sans text-sm text-visage-bg/50 mt-4 max-w-sm font-light">Paris based. Global reach. Representing the avant-garde in fashion photography and direction.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-sans text-[10px] uppercase tracking-[0.2em] text-visage-gold mb-6">Directory</h4>
+                    <ul class="flex flex-col gap-3 font-sans text-sm font-light">
+                        <li><a href="#" class="hover:text-visage-gold transition-colors">Home</a></li>
+                        <li><a href="#" class="hover:text-visage-gold transition-colors">Archive (Selected)</a></li>
+                        <li><a href="#" class="hover:text-visage-gold transition-colors">Talent Board</a></li>
+                        <li><a href="#" class="hover:text-visage-gold transition-colors">Information</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-sans text-[10px] uppercase tracking-[0.2em] text-visage-gold mb-6">Social</h4>
+                    <ul class="flex flex-col gap-3 font-sans text-sm font-light">
+                        <li><a href="#" class="hover:text-visage-gold transition-colors flex items-center gap-2"><i class="ph ph-instagram-logo"></i> Instagram</a></li>
+                        <li><a href="#" class="hover:text-visage-gold transition-colors flex items-center gap-2"><i class="ph ph-behance-logo"></i> Behance</a></li>
+                        <li><a href="#" class="hover:text-visage-gold transition-colors flex items-center gap-2"><i class="ph ph-pinterest-logo"></i> Pinterest</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Giant Logotype -->
+            <div class="w-full text-center flex justify-center items-center select-none pt-4 pb-8">
+                <h2 class="font-serif uppercase footer-logo font-bold tracking-tighter w-full text-justify flex justify-between" aria-label="VISAGE">
+                    <span>V</span><span>I</span><span>S</span><span>A</span><span>G</span><span>E</span>
+                </h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 font-sans text-[10px] uppercase tracking-widest text-visage-bg/40 mt-8">
+                <p>&copy; 2024 VISAGE Agency. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-visage-bg transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-visage-bg transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

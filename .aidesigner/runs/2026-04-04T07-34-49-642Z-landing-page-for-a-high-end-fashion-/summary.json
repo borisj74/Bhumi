@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-04T07-34-49-642Z-landing-page-for-a-high-end-fashion-",
+  "createdAt": "2026-04-04T07:34:49.649Z",
+  "prompt": "Landing page for a high-end fashion agency. Editorial luxury aesthetic.",
+  "mode": null,
+  "url": null,
+  "viewport": "desktop",
+  "repoRoot": "/Users/bjov/Desktop/Projects/AI Designer",
+  "cwd": "/Users/bjov/Desktop/Projects/AI Designer",
+  "requestPath": "/Users/bjov/Desktop/Projects/AI Designer/.aidesigner/runs/2026-04-04T07-34-49-642Z-landing-page-for-a-high-end-fashion-/request.json",
+  "repoContextPath": "/Users/bjov/Desktop/Projects/AI Designer/.aidesigner/runs/2026-04-04T07-34-49-642Z-landing-page-for-a-high-end-fashion-/repo-context.json",
+  "designHtmlPath": "/Users/bjov/Desktop/Projects/AI Designer/.aidesigner/runs/2026-04-04T07-34-49-642Z-landing-page-for-a-high-end-fashion-/design.html",
+  "previewPath": null,
+  "previewError": "Preview rendering requires puppeteer. Install it in the repo or alongside @aidesigner/agent-skills.",
+  "parentRunId": null,
+  "usage": null,
+  "transport": "mcp",
+  "remoteRunId": "5e7b7010-b529-41a8-b037-338a479c438a"
+}
