@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import { useRef } from 'react';
 import { HOME_SCROLL_IMAGES } from './homeScrollImages';
 
@@ -20,6 +20,9 @@ function ScrollImage({
   const segEnd = (index + 1) / total;
 
   const isFirst = index === 0;
+  const fadeStart = Math.max(0, segStart - 0.03);
+  const fadeEnd = segStart + 0.03;
+
   const scale = useTransform(
     scrollYProgress,
     [segStart, segEnd],
@@ -31,10 +34,11 @@ function ScrollImage({
     isFirst ? [0, 0] : [12, 0],
   );
 
-  const opacity = useTransform(scrollYProgress, (v) => {
-    if (isFirst) return 1;
-    return v >= segStart ? 1 : 0;
-  });
+  const opacity = useTransform(
+    scrollYProgress,
+    isFirst ? [0, 1] : [fadeStart, fadeEnd],
+    isFirst ? [1, 1] : [0, 1],
+  );
 
   return (
     <motion.div
@@ -77,9 +81,14 @@ function ScrollImage({
 export function HomeScrollHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const n = HOME_SCROLL_IMAGES.length;
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: rawProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
+  });
+  const scrollYProgress = useSpring(rawProgress, {
+    stiffness: 80,
+    damping: 22,
+    restDelta: 0.0005,
   });
 
   return (
