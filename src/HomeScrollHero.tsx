@@ -18,28 +18,37 @@ function ScrollImage({
 }) {
   const segStart = index / total;
   const segEnd = (index + 1) / total;
-
   const isFirst = index === 0;
-  const scale = useTransform(
+
+  /**
+   * Jules Mesnil–style: clip-path wipe from bottom to top.
+   * inset(100% 0% 0% 0%) = element fully hidden (top inset = 100%)
+   * inset(0%   0% 0% 0%) = element fully visible
+   * As the top inset decreases from 100% → 0% the visible area
+   * grows upward from the bottom edge — exactly the curtain-rise feel.
+   */
+  const clipPath = useTransform(
     scrollYProgress,
     [segStart, segEnd],
-    isFirst ? [1, 1] : [0.5, 1],
-  );
-  const borderRadius = useTransform(
-    scrollYProgress,
-    [segStart, segEnd],
-    isFirst ? [0, 0] : [12, 0],
+    isFirst
+      ? ['inset(0% 0% 0% 0%)', 'inset(0% 0% 0% 0%)']
+      : ['inset(100% 0% 0% 0%)', 'inset(0% 0% 0% 0%)'],
   );
 
-  const opacity = useTransform(scrollYProgress, (v) => {
-    if (isFirst) return 1;
-    return v >= segStart ? 1 : 0;
-  });
+  /**
+   * The image inside the clip region scales from slightly zoomed-in
+   * to 1:1 as it settles into place — gives a weighted, cinematic feel.
+   */
+  const imgScale = useTransform(
+    scrollYProgress,
+    [segStart, segEnd],
+    isFirst ? [1, 1] : [1.12, 1],
+  );
 
   return (
     <motion.div
       className="absolute inset-0 flex items-center justify-center"
-      style={{ zIndex: index, opacity }}
+      style={{ zIndex: index }}
     >
       <a
         href="/work.html"
@@ -49,16 +58,16 @@ function ScrollImage({
         <motion.div
           className="relative overflow-hidden will-change-transform"
           style={{
-            scale,
-            borderRadius,
+            clipPath,
             width: `min(${IMG_W}px, 85vw)`,
             aspectRatio: `${IMG_W} / ${IMG_H}`,
           }}
         >
-          <img
+          <motion.img
             src={src}
             alt=""
             className="block h-full w-full object-cover"
+            style={{ scale: imgScale }}
             loading={index === 0 ? 'eager' : 'lazy'}
             decoding="async"
             draggable={false}
@@ -71,8 +80,9 @@ function ScrollImage({
 
 /**
  * Jules Mesnil–style scroll hero: tall scroll track, single sticky viewport.
- * Images layer and grow from ~50 % → 100 % scale at a fixed 460 × 600 target
- * size, centered on an off-white (#F4F4F0) background.
+ * Each image reveals with a bottom-to-top clip-path wipe as you scroll into
+ * its segment, with the inner image scaling from 1.12 → 1 for a cinematic settle.
+ * Spring-smoothed scroll progress adds natural inertia throughout.
  */
 export function HomeScrollHero() {
   const containerRef = useRef<HTMLDivElement>(null);
