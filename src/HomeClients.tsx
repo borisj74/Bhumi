@@ -4,7 +4,7 @@ import { CLIENT_HOVER_IMAGES } from './clientHoverImages';
 import { revealEase } from './motionPresets';
 
 const gridClass =
-  'grid grid-cols-1 sm:grid-cols-3 gap-x-12 gap-y-5 md:gap-y-6 font-sans text-xs tracking-widest uppercase text-gray-900';
+  'grid grid-cols-1 sm:grid-cols-3 gap-x-16 gap-y-5 md:gap-y-6 font-sans text-xs tracking-widest uppercase text-gray-900 sm:w-fit';
 
 function ClientNamePeek({ name, imageSrc }: { name: string; imageSrc: string }) {
   const reduceMotion = useReducedMotion();
