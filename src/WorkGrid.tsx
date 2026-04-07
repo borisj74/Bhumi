@@ -73,8 +73,7 @@ export function WorkGrid({ id = 'work-grid', slots = WORK_GRID_SLOTS, className 
       className={sectionClass}
       variants={containerVariants}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0 }}
+      animate="visible"
     >
       {slots.map((slot) => (
         <motion.article key={slot.slug} variants={tileVariants} className={slot.articleClass}>
