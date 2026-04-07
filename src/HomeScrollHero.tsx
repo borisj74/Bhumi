@@ -20,9 +20,6 @@ function ScrollImage({
   const segEnd = (index + 1) / total;
 
   const isFirst = index === 0;
-  const fadeStart = Math.max(0, segStart - 0.03);
-  const fadeEnd = segStart + 0.03;
-
   const scale = useTransform(
     scrollYProgress,
     [segStart, segEnd],
@@ -34,11 +31,10 @@ function ScrollImage({
     isFirst ? [0, 0] : [12, 0],
   );
 
-  const opacity = useTransform(
-    scrollYProgress,
-    isFirst ? [0, 1] : [fadeStart, fadeEnd],
-    isFirst ? [1, 1] : [0, 1],
-  );
+  const opacity = useTransform(scrollYProgress, (v) => {
+    if (isFirst) return 1;
+    return v >= segStart ? 1 : 0;
+  });
 
   return (
     <motion.div
