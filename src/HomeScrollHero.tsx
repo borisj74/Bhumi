@@ -40,13 +40,15 @@ export function HomeScrollHero() {
     setTransitionToken((t) => t + 1);
   }, []);
 
-  // Wheel/touch only on the image frame — not the full viewport section — so the page
-  // can still scroll to "Selected Clients" when the cursor is outside the canvas.
+  const getCommittedIndex = useCallback(() => committedRef.current, []);
+
   const { goNext, goPrev } = useEditorialCarousel(containerRef, {
     imageCount: n,
     onIndexChange,
     isReady: imagesReady && n > 0,
     interactionRef,
+    getCommittedIndex,
+    scrollLockSectionRef: sectionRef,
   });
 
   useEffect(() => {
@@ -218,37 +220,43 @@ export function HomeScrollHero() {
   const labelId = 'home-scroll-hero-label';
 
   return (
-    <section
-      ref={sectionRef}
-      tabIndex={0}
-      className="relative flex min-h-[100dvh] min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden bg-[#F4F4F0] py-24 md:py-32"
-      aria-labelledby={labelId}
+    <div
+      className="relative w-full"
+      style={{ height: `${n * 100}vh` }}
+      aria-label="Featured imagery — scroll advances slides until the last image, then continues to Selected Clients"
     >
-      <h2 id={labelId} className="sr-only">
-        Featured imagery — use scroll wheel, swipe, or arrow keys to explore
-      </h2>
-      <p className="sr-only" aria-live="polite">
-        Slide {committedIndex + 1} of {n}
-      </p>
-      <div
-        ref={containerRef}
-        className="relative w-[min(460px,85vw)]"
-        style={{ aspectRatio: `${IMG_W} / ${IMG_H}` }}
+      <section
+        ref={sectionRef}
+        tabIndex={0}
+        className="sticky top-0 flex min-h-[100dvh] min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden bg-[#F4F4F0] py-24 md:py-32"
+        aria-labelledby={labelId}
       >
-        <canvas
-          ref={canvasRef}
-          role="img"
-          aria-label={`Editorial image ${committedIndex + 1} of ${n}`}
-          className="block h-full w-full"
-        />
-        <a
-          href="/work.html"
-          className="absolute inset-0 z-10 block"
-          aria-label="View work"
+        <h2 id={labelId} className="sr-only">
+          Featured imagery — use scroll wheel, swipe, or arrow keys to explore
+        </h2>
+        <p className="sr-only" aria-live="polite">
+          Slide {committedIndex + 1} of {n}
+        </p>
+        <div
+          ref={containerRef}
+          className="relative w-[min(460px,85vw)]"
+          style={{ aspectRatio: `${IMG_W} / ${IMG_H}` }}
         >
-          <span className="sr-only">View work</span>
-        </a>
-      </div>
-    </section>
+          <canvas
+            ref={canvasRef}
+            role="img"
+            aria-label={`Editorial image ${committedIndex + 1} of ${n}`}
+            className="block h-full w-full"
+          />
+          <a
+            href="/work.html"
+            className="absolute inset-0 z-10 block"
+            aria-label="View work"
+          >
+            <span className="sr-only">View work</span>
+          </a>
+        </div>
+      </section>
+    </div>
   );
 }

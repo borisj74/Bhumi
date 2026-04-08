@@ -20,6 +20,13 @@ export type EditorialCarouselOptions = {
   isReady: boolean;
   /** Updated by the canvas layer when transitions start/end */
   interactionRef: MutableRefObject<EditorialInteractionState>;
+  /** Current slide index (must match canvas after each transition) */
+  getCommittedIndex: () => number;
+  /**
+   * Sticky hero section — when in view, wheel advances slides instead of the page
+   * until the last slide; then scroll reaches Selected Clients.
+   */
+  scrollLockSectionRef: RefObject<HTMLElement | null>;
 };
 
 export type EditorialCarouselControls = {
@@ -28,10 +35,16 @@ export type EditorialCarouselControls = {
   resetAutoAdvance: () => void;
 };
 
+function isHeroScrollLockActive(section: HTMLElement): boolean {
+  const rect = section.getBoundingClientRect();
+  const vh = window.innerHeight;
+  return rect.top <= 12 && rect.bottom >= vh * 0.52;
+}
+
 /**
  * Wheel capture, accumulation + threshold, cooldown, touch swipe, auto-advance.
- * Pass a ref to the **carousel image area** (not a full-viewport section), so
- * `preventDefault` on wheel does not block page scroll outside that element.
+ * With `scrollLockSectionRef`, document wheel is captured while the sticky hero
+ * dominates the viewport so the page does not scroll until the last slide.
  */
 export function useEditorialCarousel(
   containerRef: RefObject<HTMLElement | null>,
@@ -40,6 +53,8 @@ export function useEditorialCarousel(
     onIndexChange,
     isReady,
     interactionRef,
+    getCommittedIndex,
+    scrollLockSectionRef,
   }: EditorialCarouselOptions
 ): EditorialCarouselControls {
   const indexRef = useRef(0);
@@ -60,19 +75,24 @@ export function useEditorialCarousel(
     if (imageCount <= 1 || !isReady) return;
 
     const tick = (): void => {
+      indexRef.current = getCommittedIndex();
       const { transitioning } = interactionRef.current;
       if (transitioning) {
         autoTimerRef.current = window.setTimeout(tick, 80);
         return;
       }
-      const next = (indexRef.current + 1) % imageCount;
+      if (indexRef.current >= imageCount - 1) {
+        autoTimerRef.current = window.setTimeout(tick, EDITORIAL_AUTO_MS);
+        return;
+      }
+      const next = indexRef.current + 1;
       indexRef.current = next;
       onIndexChange(next);
       autoTimerRef.current = window.setTimeout(tick, EDITORIAL_AUTO_MS);
     };
 
     autoTimerRef.current = window.setTimeout(tick, EDITORIAL_AUTO_MS);
-  }, [clearAutoTimer, imageCount, interactionRef, isReady, onIndexChange]);
+  }, [clearAutoTimer, getCommittedIndex, imageCount, interactionRef, isReady, onIndexChange]);
 
   const resetAutoAdvance = useCallback(() => {
     scheduleAutoAdvance();
@@ -97,14 +117,15 @@ export function useEditorialCarousel(
   const tryNavigate = useCallback(
     (delta: -1 | 1) => {
       if (!isReady || !canNavigate()) return false;
-      const next = (indexRef.current + delta + imageCount) % imageCount;
-      if (next === indexRef.current) return false;
+      const idx = getCommittedIndex();
+      const next = idx + delta;
+      if (next < 0 || next >= imageCount) return false;
       indexRef.current = next;
       onIndexChange(next);
       resetAutoAdvance();
       return true;
     },
-    [canNavigate, imageCount, isReady, onIndexChange, resetAutoAdvance]
+    [canNavigate, getCommittedIndex, imageCount, isReady, onIndexChange, resetAutoAdvance]
   );
 
   const goNext = useCallback(() => {
@@ -116,12 +137,28 @@ export function useEditorialCarousel(
   }, [tryNavigate]);
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el || !isReady) return;
+    const section = scrollLockSectionRef.current;
+    if (!isReady || !section) return;
 
-    const onWheel = (e: WheelEvent) => {
-      if (!el.contains(e.target as Node)) return;
+    const onWheel = (e: WheelEvent): void => {
+      if (!isHeroScrollLockActive(section)) return;
+
+      const idx = getCommittedIndex();
+      indexRef.current = idx;
+
+      if (interactionRef.current.transitioning) {
+        e.preventDefault();
+        return;
+      }
+
+      const downIntent = e.deltaY > 0;
+      const upIntent = e.deltaY < 0;
+
+      if (downIntent && idx >= imageCount - 1) return;
+      if (upIntent && idx <= 0) return;
+
       e.preventDefault();
+
       if (!canNavigate()) return;
 
       const now = performance.now();
@@ -136,12 +173,32 @@ export function useEditorialCarousel(
       const dir = wheelAccumRef.current > 0 ? 1 : -1;
       wheelAccumRef.current = 0;
 
-      const next = (indexRef.current + dir + imageCount) % imageCount;
-      if (next === indexRef.current) return;
+      const next = idx + dir;
+      if (next < 0 || next >= imageCount || next === idx) return;
       indexRef.current = next;
       onIndexChange(next);
       resetAutoAdvance();
     };
+
+    window.addEventListener('wheel', onWheel, { passive: false, capture: true });
+
+    return () => {
+      window.removeEventListener('wheel', onWheel, { capture: true });
+    };
+  }, [
+    canNavigate,
+    getCommittedIndex,
+    imageCount,
+    interactionRef,
+    isReady,
+    onIndexChange,
+    resetAutoAdvance,
+    scrollLockSectionRef,
+  ]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || !isReady) return;
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
@@ -159,24 +216,25 @@ export function useEditorialCarousel(
       touchStartYRef.current = null;
       if (Math.abs(dy) < EDITORIAL_SWIPE_THRESHOLD_PX) return;
       if (!canNavigate()) return;
+
+      const idx = getCommittedIndex();
+      indexRef.current = idx;
       const dir = dy > 0 ? 1 : -1;
-      const next = (indexRef.current + dir + imageCount) % imageCount;
-      if (next === indexRef.current) return;
+      const next = idx + dir;
+      if (next < 0 || next >= imageCount) return;
       indexRef.current = next;
       onIndexChange(next);
       resetAutoAdvance();
     };
 
-    el.addEventListener('wheel', onWheel, { passive: false });
     el.addEventListener('touchstart', onTouchStart, { passive: true });
     el.addEventListener('touchend', onTouchEnd, { passive: true });
 
     return () => {
-      el.removeEventListener('wheel', onWheel);
       el.removeEventListener('touchstart', onTouchStart);
       el.removeEventListener('touchend', onTouchEnd);
     };
-  }, [canNavigate, containerRef, imageCount, isReady, onIndexChange, resetAutoAdvance]);
+  }, [canNavigate, containerRef, getCommittedIndex, imageCount, isReady, onIndexChange, resetAutoAdvance]);
 
   return {
     goNext,
