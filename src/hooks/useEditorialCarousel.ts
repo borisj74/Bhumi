@@ -5,7 +5,8 @@ export const EDITORIAL_COOLDOWN_MS = 800;
 export const EDITORIAL_WHEEL_RESET_MS = 150;
 export const EDITORIAL_SWIPE_THRESHOLD_PX = 50;
 export const EDITORIAL_AUTO_MS = 5000;
-export const EDITORIAL_TRANSITION_MS = 1000;
+/** Canvas slide crossfade / reveal duration (ease-out quint applied in renderer). */
+export const EDITORIAL_TRANSITION_MS = 700;
 
 export type EditorialInteractionState = {
   /** True while canvas transition is running — block wheel/swipe */
