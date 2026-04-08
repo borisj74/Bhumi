@@ -222,7 +222,6 @@ export function HomeScrollHero() {
   return (
     <div
       className="relative w-full"
-      style={{ height: `${n * 100}vh` }}
       aria-label="Featured imagery — scroll advances slides until the last image, then continues to Selected Clients"
     >
       <section
