@@ -221,13 +221,17 @@ export function HomeScrollHero() {
 
   return (
     <div
-      className="relative w-full"
+      className="relative w-full min-h-[200vh]"
       aria-label="Featured imagery — scroll advances slides until the last image, then continues to Selected Clients"
     >
+      {/*
+        Sticky needs a taller scroll parent than the sticky box; otherwise the hero
+        scrolls away with the page. ~200vh gives one viewport of pinned hero before release.
+      */}
       <section
         ref={sectionRef}
         tabIndex={0}
-        className="sticky top-0 flex min-h-[100dvh] min-h-[100svh] w-full flex-col overflow-hidden bg-[#F4F4F0] px-6 py-24 md:px-10 md:py-32 lg:px-14"
+        className="sticky top-0 flex h-[100dvh] min-h-[100svh] w-full flex-col items-center justify-center bg-[#F4F4F0] px-6 py-24 md:px-10 md:py-32 lg:px-14"
         aria-labelledby={labelId}
       >
         <h2 id={labelId} className="sr-only">
@@ -236,7 +240,7 @@ export function HomeScrollHero() {
         <p className="sr-only" aria-live="polite">
           Slide {committedIndex + 1} of {n}
         </p>
-        <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center">
+        <div className="flex w-full max-w-full shrink-0 flex-col items-center justify-center">
           <div
             ref={containerRef}
             className="relative mx-auto w-full max-w-[min(460px,85vw)] shrink-0"
