@@ -30,6 +30,8 @@ export type EditorialCarouselControls = {
 
 /**
  * Wheel capture, accumulation + threshold, cooldown, touch swipe, auto-advance.
+ * Pass a ref to the **carousel image area** (not a full-viewport section), so
+ * `preventDefault` on wheel does not block page scroll outside that element.
  */
 export function useEditorialCarousel(
   containerRef: RefObject<HTMLElement | null>,

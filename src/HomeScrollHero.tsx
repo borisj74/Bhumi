@@ -40,7 +40,9 @@ export function HomeScrollHero() {
     setTransitionToken((t) => t + 1);
   }, []);
 
-  const { goNext, goPrev } = useEditorialCarousel(sectionRef, {
+  // Wheel/touch only on the image frame — not the full viewport section — so the page
+  // can still scroll to "Selected Clients" when the cursor is outside the canvas.
+  const { goNext, goPrev } = useEditorialCarousel(containerRef, {
     imageCount: n,
     onIndexChange,
     isReady: imagesReady && n > 0,
