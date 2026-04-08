@@ -227,7 +227,7 @@ export function HomeScrollHero() {
       <section
         ref={sectionRef}
         tabIndex={0}
-        className="sticky top-0 flex min-h-[100dvh] min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden bg-[#F4F4F0] py-24 md:py-32"
+        className="sticky top-0 flex min-h-[100dvh] min-h-[100svh] w-full flex-col overflow-hidden bg-[#F4F4F0] px-6 py-24 md:px-10 md:py-32 lg:px-14"
         aria-labelledby={labelId}
       >
         <h2 id={labelId} className="sr-only">
@@ -236,24 +236,26 @@ export function HomeScrollHero() {
         <p className="sr-only" aria-live="polite">
           Slide {committedIndex + 1} of {n}
         </p>
-        <div
-          ref={containerRef}
-          className="relative w-[min(460px,85vw)]"
-          style={{ aspectRatio: `${IMG_W} / ${IMG_H}` }}
-        >
-          <canvas
-            ref={canvasRef}
-            role="img"
-            aria-label={`Editorial image ${committedIndex + 1} of ${n}`}
-            className="block h-full w-full"
-          />
-          <a
-            href="/work.html"
-            className="absolute inset-0 z-10 block"
-            aria-label="View work"
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center">
+          <div
+            ref={containerRef}
+            className="relative mx-auto w-full max-w-[min(460px,85vw)] shrink-0"
+            style={{ aspectRatio: `${IMG_W} / ${IMG_H}` }}
           >
-            <span className="sr-only">View work</span>
-          </a>
+            <canvas
+              ref={canvasRef}
+              role="img"
+              aria-label={`Editorial image ${committedIndex + 1} of ${n}`}
+              className="block h-full w-full"
+            />
+            <a
+              href="/work.html"
+              className="absolute inset-0 z-10 block"
+              aria-label="View work"
+            >
+              <span className="sr-only">View work</span>
+            </a>
+          </div>
         </div>
       </section>
     </div>
